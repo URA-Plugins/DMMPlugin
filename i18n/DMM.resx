@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Core UI -->
+  <data name="I18N_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="I18N_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Return</value>
+  </data>
+  <!-- DMM Tab Menu -->
+  <data name="Tabs_DMM_Title" xml:space="preserve">
+    <value>DMM</value>
+  </data>
+  <data name="Tabs_DMM_Caution" xml:space="preserve">
+    <value>This feature requires an environment that can access DMM/Umamusume without a proxy (in Japan/has global proxy, etc., excluding accelerators as they don't accelerate URA itself).
+This feature is only suitable for those who don't like launching DMM every time or hate frequent DMM updates, but DMMGamePlayer still needs to be installed and is responsible for updates.
+Do you want to enable this feature?</value>
+  </data>
+  <data name="Tabs_DMM_Enable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="Tabs_DMM_ViewLauncherInformation" xml:space="preserve">
+    <value>View DMMGamePlayer Info</value>
+  </data>
+  <data name="Tabs_DMM_ViewLauncherInformation_Caution" xml:space="preserve">
+    <value>Modification not supported, please edit config.yaml directly. Press Enter to return.</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation" xml:space="preserve">
+    <value>Edit Machine Information</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputMA" xml:space="preserve">
+    <value>Input mac_address</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputHS" xml:space="preserve">
+    <value>Input hdd_serial</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputMB" xml:space="preserve">
+    <value>Input motherboard</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputOS" xml:space="preserve">
+    <value>Input user_os</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputUmamusumePath" xml:space="preserve">
+    <value>Input Umamusume Path</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts" xml:space="preserve">
+    <value>Edit Accounts</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_InputName" xml:space="preserve">
+    <value>Input Name</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_InputName_Duplicate" xml:space="preserve">
+    <value>Name already exists</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_SavePath" xml:space="preserve">
+    <value>SaveData Path</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_InputSavePath" xml:space="preserve">
+    <value>Input SaveData Path (can be empty)</value>
+  </data>
+  <!-- Account Edit -->
+  <data name="I18N_AccountEdit_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="I18N_AccountEdit_Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="I18N_AccountEdit_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="I18N_AccountEdit_TokenStatus" xml:space="preserve">
+    <value>Token Status</value>
+  </data>
+  <data name="I18N_AccountEdit_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="I18N_AccountEdit_NameNotSet" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="I18N_AccountEdit_PasswordHidden" xml:space="preserve">
+    <value>********</value>
+  </data>
+  <data name="I18N_AccountEdit_TokenValid" xml:space="preserve">
+    <value>Valid (Expires: {0:yyyy-MM-dd HH:mm:ss})</value>
+  </data>
+  <data name="I18N_AccountEdit_TokenInvalid" xml:space="preserve">
+    <value>Invalid/Expired</value>
+  </data>
+  <data name="I18N_AccountEdit_EnterName" xml:space="preserve">
+    <value>Enter Name</value>
+  </data>
+  <data name="I18N_AccountEdit_NameDuplicate" xml:space="preserve">
+    <value>Name already exists</value>
+  </data>
+  <data name="I18N_AccountEdit_EnterAccount" xml:space="preserve">
+    <value>Enter DMM Account (Email)</value>
+  </data>
+  <data name="I18N_AccountEdit_EnterPassword" xml:space="preserve">
+    <value>Enter DMM Password</value>
+  </data>
+  <!-- Game Launch -->
+  <data name="I18N_MultipleAccountsFound" xml:space="preserve">
+    <value>Multiple accounts found, please choose which one to start</value>
+  </data>
+  <data name="I18N_Start_Checking" xml:space="preserve">
+    <value>[yellow]Detecting if umamusume.exe is running[/]</value>
+  </data>
+  <data name="I18N_Start_Checking_Log" xml:space="preserve">
+    <value>[grey]Log: [/] {0}</value>
+  </data>
+  <data name="I18N_Start_Checking_Found" xml:space="preserve">
+    <value>Detected {0} instances of umamusume.exe running</value>
+  </data>
+  <data name="I18N_Start_Checking_AlreadyRunning" xml:space="preserve">
+    <value>Detected umamusume.exe is running, directly starting the server</value>
+  </data>
+  <data name="I18N_Start_GetToken" xml:space="preserve">
+    <value>[bold blue]Acquiring DMM One-time Token[/]</value>
+  </data>
+  <data name="I18N_Start_TokenGot" xml:space="preserve">
+    <value>DMM One-time Token acquired</value>
+  </data>
+  <data name="I18N_Start_TokenFailed" xml:space="preserve">
+    <value>Failed to acquire DMM One-time Token</value>
+  </data>
+  <data name="I18N_Start_Launching" xml:space="preserve">
+    <value>Starting umamusume.exe</value>
+  </data>
+  <data name="I18N_Start_Started" xml:space="preserve">
+    <value>[bold green]Launched[/]</value>
+  </data>
+  <data name="I18N_AppLaunchCanceled" xml:space="preserve">
+    <value>Client launch cancelled</value>
+  </data>
+  <!-- Auth Errors -->
+  <data name="I18N_Auth_TokenNotFound" xml:space="preserve">
+    <value>Failed to get login form token</value>
+  </data>
+  <data name="I18N_Auth_OAuthUrlNotFound" xml:space="preserve">
+    <value>Failed to get OAuth redirect URL, please check if account and password are correct</value>
+  </data>
+  <data name="I18N_Auth_RedirectUrlNotFound" xml:space="preserve">
+    <value>Failed to get OAuth redirect URL</value>
+  </data>
+  <data name="I18N_Auth_OAuthCodeNotFound" xml:space="preserve">
+    <value>Failed to get OAuth code</value>
+  </data>
+  <data name="I18N_Auth_AccessTokenFailed" xml:space="preserve">
+    <value>Failed to get access token: {0}</value>
+  </data>
+  <data name="I18N_Auth_TermsAgreeFailed" xml:space="preserve">
+    <value>Failed to agree to terms: {0}</value>
+  </data>
+  <!-- Token Refresh -->
+  <data name="I18N_DMMTokenExpired" xml:space="preserve">
+    <value>DMM Session has expired</value>
+  </data>
+  <data name="I18N_Token_ExpiredNoCredentials" xml:space="preserve">
+    <value>Token has expired, but account or password is not set, cannot auto re-authenticate</value>
+  </data>
+  <data name="I18N_Token_Refreshing" xml:space="preserve">
+    <value>Token has expired, re-authenticating with account {0}...</value>
+  </data>
+  <data name="I18N_Token_RefreshSuccess" xml:space="preserve">
+    <value>Token re-acquired successfully, expires at: {0:yyyy-MM-dd HH:mm:ss}</value>
+  </data>
+  <data name="I18N_Token_RefreshFailed" xml:space="preserve">
+    <value>Re-authentication failed: {0}</value>
+  </data>
+  <data name="I18N_Token_CannotGetValid" xml:space="preserve">
+    <value>Cannot get valid access token</value>
+  </data>
+  <data name="I18N_Token_RetryAuth" xml:space="preserve">
+    <value>Attempting re-authentication...</value>
+  </data>
+  <data name="I18N_Token_ReauthFailed" xml:space="preserve">
+    <value>Re-authentication failed</value>
+  </data>
+  <!-- Terms Agreement -->
+  <data name="I18N_Terms_Required" xml:space="preserve">
+    <value>Game terms agreement required, auto-agreeing...</value>
+  </data>
+  <data name="I18N_Terms_AgreeFailed" xml:space="preserve">
+    <value>Unable to agree to game terms, please use DMM Game Player to agree manually</value>
+  </data>
+  <!-- Launch Errors -->
+  <data name="I18N_Launch_Failed" xml:space="preserve">
+    <value>Launch failed: {0}</value>
+  </data>
+  <data name="I18N_Launch_SaveDataFailed" xml:space="preserve">
+    <value>Save data processing failed</value>
+  </data>
+  <!-- SaveData Management -->
+  <data name="I18N_SaveData_UsingDefault" xml:space="preserve">
+    <value>Using default save data</value>
+  </data>
+  <data name="I18N_SaveData_BackupCreated" xml:space="preserve">
+    <value>Backup created</value>
+  </data>
+  <data name="I18N_SaveData_Loaded" xml:space="preserve">
+    <value>Loaded save data for account [{0}]</value>
+  </data>
+  <data name="I18N_SaveData_AskIsLastLoginAccount" xml:space="preserve">
+    <value>Is this the account you logged into last time? If yes, the current SaveData.db will be linked to this account. If no, SaveData.db will be renamed to SaveData.db.old.</value>
+  </data>
+  <data name="I18N_SaveData_Associated" xml:space="preserve">
+    <value>Save data has been associated with account [{0}]</value>
+  </data>
+  <data name="I18N_SaveData_AssociateFailed" xml:space="preserve">
+    <value>Failed to associate save data: {0}</value>
+  </data>
+  <data name="I18N_SaveData_RenamedToOld" xml:space="preserve">
+    <value>SaveData.db has been renamed to {0}</value>
+  </data>
+  <data name="I18N_SaveData_RenameFailed" xml:space="preserve">
+    <value>Failed to rename save data: {0}</value>
+  </data>
+  <data name="I18N_SaveData_SavedForAccount" xml:space="preserve">
+    <value>Save data saved for account [{0}]</value>
+  </data>
+  <data name="I18N_SaveData_SaveFailed" xml:space="preserve">
+    <value>Failed to save save data: {0}</value>
+  </data>
+  <data name="I18N_SaveData_PathNotDetermined" xml:space="preserve">
+    <value>Cannot determine save data path</value>
+  </data>
+  <data name="I18N_SaveData_SameAccountSkip" xml:space="preserve">
+    <value>Same account, skipping save data switching</value>
+  </data>
+  <data name="I18N_SaveData_NewArchiveWillBeCreated" xml:space="preserve">
+    <value>Account save data does not exist, a new archive will be created: {0}</value>
+  </data>
+  <data name="I18N_SaveData_LoadFailed" xml:space="preserve">
+    <value>Failed to load save data: {0}</value>
+  </data>
+  <!-- Legacy/Unused -->
+  <data name="I18N_AddAccount" xml:space="preserve">
+    <value>Add account</value>
+  </data>
+  <data name="I18N_InputMacAddressPrompt" xml:space="preserve">
+    <value>Please enter mac_address (current value: {0}, leave blank to not modify):</value>
+  </data>
+  <data name="I18N_InputMotherboardPrompt" xml:space="preserve">
+    <value>Please enter motherboard (current value: {0}, leave blank to not modify):</value>
+  </data>
+  <data name="I18N_InputSaveDataFilePathPrompt" xml:space="preserve">
+    <value>Please enter savedata_file_path (leave blank to use default):</value>
+  </data>
+  <data name="I18N_InputUmamusumeFilePathPrompt" xml:space="preserve">
+    <value>Please enter umamusume_file_path (current value: {0}, leave blank to not modify):</value>
+  </data>
+  <data name="I18N_InputUserOsPrompt" xml:space="preserve">
+    <value>Please enter user_os (current value: {0}, leave blank to not modify):</value>
+  </data>
+  <data name="I18N_DeleteAccountInstruction" xml:space="preserve">
+    <value>Press Enter on the selected account to delete</value>
+  </data>
+  <data name="I18N_InputAccountCommentPrompt" xml:space="preserve">
+    <value>Please enter a note for this account:</value>
+  </data>
+  <data name="I18N_InputHddSerialPrompt" xml:space="preserve">
+    <value>Please enter hdd_serial (current value: {0}, leave blank to not modify):</value>
+  </data>
+  <data name="I18N_InputActauthPrompt" xml:space="preserve">
+    <value>Please enter actauth:</value>
+  </data>
+  <data name="I18N_UnknownTokenKey" xml:space="preserve">
+    <value>Unknown .token key {0}</value>
+  </data>
+  <data name="I18N_AppRootPathNull" xml:space="preserve">
+    <value>Incorrect game path?</value>
+  </data>
+  <data name="I18N_TokenStatus_Valid" xml:space="preserve">
+    <value>Valid</value>
+  </data>
+  <data name="I18N_TokenStatus_Invalid" xml:space="preserve">
+    <value>Invalid/Expired</value>
+  </data>
+</root>

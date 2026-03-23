@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Core UI -->
+  <data name="I18N_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="I18N_Back" xml:space="preserve">
+    <value>戻る</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>戻る</value>
+  </data>
+  <!-- DMM Tab Menu -->
+  <data name="Tabs_DMM_Title" xml:space="preserve">
+    <value>DMM</value>
+  </data>
+  <data name="Tabs_DMM_Caution" xml:space="preserve">
+    <value>この機能は、プロキシなしでDMM/ウマ娘にアクセスできる環境が必要です（日本国内/グローバルプロキシなど、アクセラレータはURA自体を加速しないため除く）。
+この機能は、毎回DMMを起動するのが面倒な方や、DMMの頻繁なアップデートが嫌いな方に適していますが、DMMGamePlayerのインストールとアップデート管理は依然として必要です。
+この機能を有効にしますか？</value>
+  </data>
+  <data name="Tabs_DMM_Enable" xml:space="preserve">
+    <value>無効化</value>
+  </data>
+  <data name="Tabs_DMM_ViewLauncherInformation" xml:space="preserve">
+    <value>DMMGamePlayer情報を表示</value>
+  </data>
+  <data name="Tabs_DMM_ViewLauncherInformation_Caution" xml:space="preserve">
+    <value>変更はサポートされていません。必要な場合はconfig.yamlを直接編集してください。Enterを押して戻ります。</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation" xml:space="preserve">
+    <value>マシン情報を編集</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputMA" xml:space="preserve">
+    <value>mac_addressを入力</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputHS" xml:space="preserve">
+    <value>hdd_serialを入力</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputMB" xml:space="preserve">
+    <value>motherboardを入力</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputOS" xml:space="preserve">
+    <value>user_osを入力</value>
+  </data>
+  <data name="Tabs_DMM_EditMachineInformation_InputUmamusumePath" xml:space="preserve">
+    <value>ウマ娘実行ファイルパスを入力</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts" xml:space="preserve">
+    <value>アカウントを編集</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_Add" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_Name" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_InputName" xml:space="preserve">
+    <value>名前を入力</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_InputName_Duplicate" xml:space="preserve">
+    <value>名前が既に存在します</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_SavePath" xml:space="preserve">
+    <value>セーブデータパス</value>
+  </data>
+  <data name="Tabs_DMM_EditAccounts_InputSavePath" xml:space="preserve">
+    <value>セーブデータパスを入力（空可）</value>
+  </data>
+  <!-- Account Edit -->
+  <data name="I18N_AccountEdit_Name" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="I18N_AccountEdit_Account" xml:space="preserve">
+    <value>アカウント</value>
+  </data>
+  <data name="I18N_AccountEdit_Password" xml:space="preserve">
+    <value>パスワード</value>
+  </data>
+  <data name="I18N_AccountEdit_TokenStatus" xml:space="preserve">
+    <value>Token状態</value>
+  </data>
+  <data name="I18N_AccountEdit_Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="I18N_AccountEdit_NameNotSet" xml:space="preserve">
+    <value>未設定</value>
+  </data>
+  <data name="I18N_AccountEdit_PasswordHidden" xml:space="preserve">
+    <value>********</value>
+  </data>
+  <data name="I18N_AccountEdit_TokenValid" xml:space="preserve">
+    <value>有効（有効期限: {0:yyyy-MM-dd HH:mm:ss}）</value>
+  </data>
+  <data name="I18N_AccountEdit_TokenInvalid" xml:space="preserve">
+    <value>無効/期限切れ</value>
+  </data>
+  <data name="I18N_AccountEdit_EnterName" xml:space="preserve">
+    <value>名前を入力</value>
+  </data>
+  <data name="I18N_AccountEdit_NameDuplicate" xml:space="preserve">
+    <value>名前が既に存在します</value>
+  </data>
+  <data name="I18N_AccountEdit_EnterAccount" xml:space="preserve">
+    <value>DMMアカウント（メール）を入力</value>
+  </data>
+  <data name="I18N_AccountEdit_EnterPassword" xml:space="preserve">
+    <value>DMMパスワードを入力</value>
+  </data>
+  <!-- Game Launch -->
+  <data name="I18N_MultipleAccountsFound" xml:space="preserve">
+    <value>複数のアカウントが見つかりました。起動するアカウントを選択してください</value>
+  </data>
+  <data name="I18N_Start_Checking" xml:space="preserve">
+    <value>[yellow]umamusume.exeが実行中かどうかを検出中[/]</value>
+  </data>
+  <data name="I18N_Start_Checking_Log" xml:space="preserve">
+    <value>[grey]ログ: [/] {0}</value>
+  </data>
+  <data name="I18N_Start_Checking_Found" xml:space="preserve">
+    <value>実行中のumamusume.exeが{0}個検出されました</value>
+  </data>
+  <data name="I18N_Start_Checking_AlreadyRunning" xml:space="preserve">
+    <value>umamusume.exeが実行中であることが検出され、直接サーバーを起動</value>
+  </data>
+  <data name="I18N_Start_GetToken" xml:space="preserve">
+    <value>[bold blue]DMM Onetime Tokenを取得中[/]</value>
+  </data>
+  <data name="I18N_Start_TokenGot" xml:space="preserve">
+    <value>DMM Onetime Tokenを取得しました</value>
+  </data>
+  <data name="I18N_Start_TokenFailed" xml:space="preserve">
+    <value>DMM Onetime Tokenの取得に失敗</value>
+  </data>
+  <data name="I18N_Start_Launching" xml:space="preserve">
+    <value>umamusume.exeを起動中</value>
+  </data>
+  <data name="I18N_Start_Started" xml:space="preserve">
+    <value>[bold green]起動しました[/]</value>
+  </data>
+  <data name="I18N_AppLaunchCanceled" xml:space="preserve">
+    <value>クライアント起動がキャンセルされました</value>
+  </data>
+  <!-- Auth Errors -->
+  <data name="I18N_Auth_TokenNotFound" xml:space="preserve">
+    <value>ログインフォームのトークンを取得できません</value>
+  </data>
+  <data name="I18N_Auth_OAuthUrlNotFound" xml:space="preserve">
+    <value>OAuthリダイレクトURLを取得できません。アカウントとパスワードが正しいか確認してください</value>
+  </data>
+  <data name="I18N_Auth_RedirectUrlNotFound" xml:space="preserve">
+    <value>OAuthリダイレクトURLを取得できません</value>
+  </data>
+  <data name="I18N_Auth_OAuthCodeNotFound" xml:space="preserve">
+    <value>OAuthコードを取得できません</value>
+  </data>
+  <data name="I18N_Auth_AccessTokenFailed" xml:space="preserve">
+    <value>アクセストークンの取得に失敗: {0}</value>
+  </data>
+  <data name="I18N_Auth_TermsAgreeFailed" xml:space="preserve">
+    <value>規約への同意に失敗: {0}</value>
+  </data>
+  <!-- Token Refresh -->
+  <data name="I18N_DMMTokenExpired" xml:space="preserve">
+    <value>DMM Sessionが期限切れです</value>
+  </data>
+  <data name="I18N_Token_ExpiredNoCredentials" xml:space="preserve">
+    <value>トークンの有効期限が切れましたが、アカウントまたはパスワードが設定されていないため、自動再認証できません</value>
+  </data>
+  <data name="I18N_Token_Refreshing" xml:space="preserve">
+    <value>トークンの有効期限が切れました。アカウント{0}で再認証中...</value>
+  </data>
+  <data name="I18N_Token_RefreshSuccess" xml:space="preserve">
+    <value>トークンの再取得に成功しました。有効期限: {0:yyyy-MM-dd HH:mm:ss}</value>
+  </data>
+  <data name="I18N_Token_RefreshFailed" xml:space="preserve">
+    <value>再認証に失敗: {0}</value>
+  </data>
+  <data name="I18N_Token_CannotGetValid" xml:space="preserve">
+    <value>有効なアクセストークンを取得できません</value>
+  </data>
+  <data name="I18N_Token_RetryAuth" xml:space="preserve">
+    <value>再認証を試行中...</value>
+  </data>
+  <data name="I18N_Token_ReauthFailed" xml:space="preserve">
+    <value>再認証に失敗</value>
+  </data>
+  <!-- Terms Agreement -->
+  <data name="I18N_Terms_Required" xml:space="preserve">
+    <value>ゲーム規約への同意が必要です。自動同意中...</value>
+  </data>
+  <data name="I18N_Terms_AgreeFailed" xml:space="preserve">
+    <value>ゲーム規約に同意できません。DMM Game Playerで手動で同意してください</value>
+  </data>
+  <!-- Launch Errors -->
+  <data name="I18N_Launch_Failed" xml:space="preserve">
+    <value>起動に失敗: {0}</value>
+  </data>
+  <data name="I18N_Launch_SaveDataFailed" xml:space="preserve">
+    <value>セーブデータの処理に失敗</value>
+  </data>
+  <!-- SaveData Management -->
+  <data name="I18N_SaveData_UsingDefault" xml:space="preserve">
+    <value>デフォルトのセーブデータを使用</value>
+  </data>
+  <data name="I18N_SaveData_BackupCreated" xml:space="preserve">
+    <value>バックアップを作成しました</value>
+  </data>
+  <data name="I18N_SaveData_Loaded" xml:space="preserve">
+    <value>アカウント [{0}] のセーブデータを読み込みました</value>
+  </data>
+  <data name="I18N_SaveData_AskIsLastLoginAccount" xml:space="preserve">
+    <value>これは前回ログインしたアカウントですか？はいの場合、現在のSaveData.dbはこのアカウントに関連付けられます。いいえの場合、SaveData.dbはSaveData.db.oldに名前変更されます。</value>
+  </data>
+  <data name="I18N_SaveData_Associated" xml:space="preserve">
+    <value>セーブデータがアカウント [{0}] に関連付けられました</value>
+  </data>
+  <data name="I18N_SaveData_AssociateFailed" xml:space="preserve">
+    <value>セーブデータの関連付けに失敗: {0}</value>
+  </data>
+  <data name="I18N_SaveData_RenamedToOld" xml:space="preserve">
+    <value>SaveData.dbを{0}に名前変更しました</value>
+  </data>
+  <data name="I18N_SaveData_RenameFailed" xml:space="preserve">
+    <value>セーブデータの名前変更に失敗: {0}</value>
+  </data>
+  <data name="I18N_SaveData_SavedForAccount" xml:space="preserve">
+    <value>アカウント [{0}] のセーブデータを保存しました</value>
+  </data>
+  <data name="I18N_SaveData_SaveFailed" xml:space="preserve">
+    <value>セーブデータの保存に失敗: {0}</value>
+  </data>
+  <data name="I18N_SaveData_PathNotDetermined" xml:space="preserve">
+    <value>セーブデータのパスを特定できません</value>
+  </data>
+  <data name="I18N_SaveData_SameAccountSkip" xml:space="preserve">
+    <value>同じアカウントのため、セーブデータの切り替えをスキップ</value>
+  </data>
+  <data name="I18N_SaveData_NewArchiveWillBeCreated" xml:space="preserve">
+    <value>アカウントのセーブデータが存在しません。新しいアーカイブが作成されます: {0}</value>
+  </data>
+  <data name="I18N_SaveData_LoadFailed" xml:space="preserve">
+    <value>セーブデータの読み込みに失敗: {0}</value>
+  </data>
+  <!-- Legacy/Unused -->
+  <data name="I18N_AddAccount" xml:space="preserve">
+    <value>アカウントを追加</value>
+  </data>
+  <data name="I18N_InputMacAddressPrompt" xml:space="preserve">
+    <value>mac_addressを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
+  </data>
+  <data name="I18N_InputMotherboardPrompt" xml:space="preserve">
+    <value>motherboardを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
+  </data>
+  <data name="I18N_InputSaveDataFilePathPrompt" xml:space="preserve">
+    <value>savedata_file_pathを入力してください（わからない場合は空白のままにしてください）：</value>
+  </data>
+  <data name="I18N_InputUmamusumeFilePathPrompt" xml:space="preserve">
+    <value>umamusume_file_pathを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
+  </data>
+  <data name="I18N_InputUserOsPrompt" xml:space="preserve">
+    <value>user_osを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
+  </data>
+  <data name="I18N_DeleteAccountInstruction" xml:space="preserve">
+    <value>該当するアカウントを選択してEnterを押すと削除されます</value>
+  </data>
+  <data name="I18N_InputAccountCommentPrompt" xml:space="preserve">
+    <value>そのアカウントのメモを入力してください：</value>
+  </data>
+  <data name="I18N_InputHddSerialPrompt" xml:space="preserve">
+    <value>hdd_serialを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
+  </data>
+  <data name="I18N_InputActauthPrompt" xml:space="preserve">
+    <value>actauthを入力してください：</value>
+  </data>
+  <data name="I18N_UnknownTokenKey" xml:space="preserve">
+    <value>未知の.tokenキー{0}</value>
+  </data>
+  <data name="I18N_AppRootPathNull" xml:space="preserve">
+    <value>ゲームパスが正しくありますか？</value>
+  </data>
+  <data name="I18N_TokenStatus_Valid" xml:space="preserve">
+    <value>有効</value>
+  </data>
+  <data name="I18N_TokenStatus_Invalid" xml:space="preserve">
+    <value>無効/期限切れ</value>
+  </data>
+</root>
