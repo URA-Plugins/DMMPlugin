@@ -31,6 +31,9 @@ public static class SecurePassword
             var bytes = ProtectedData.Unprotect(Convert.FromBase64String(encrypted[Marker.Length..]), Entropy, DataProtectionScope.CurrentUser);
             return Encoding.UTF8.GetString(bytes);
         }
-        catch { return ""; } // 解密失败（用户变更/系统重装），返回空让用户重新输入
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("DMM 密码解密失败。可能是 Windows 用户、机器或 DPAPI 状态变更，请重新配置账号密码。", ex);
+        }
     }
 }

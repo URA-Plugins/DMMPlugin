@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsUraPlugin>false</IsUraPlugin>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DMMPlugin.csproj"
+                      AdditionalProperties="GenerateUraPluginManifestOnBuild=false;PackageUraPluginOnBuild=false;DeployUraPluginToLocalAppDataOnBuild=false" />
+  </ItemGroup>
+
+</Project>

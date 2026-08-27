@@ -173,10 +173,10 @@
     <value>複数のアカウントが見つかりました。起動するアカウントを選択してください</value>
   </data>
   <data name="I18N_Start_Checking" xml:space="preserve">
-    <value>[yellow]umamusume.exeが実行中かどうかを検出中[/]</value>
+    <value>umamusume.exeが実行中かどうかを検出中</value>
   </data>
   <data name="I18N_Start_Checking_Log" xml:space="preserve">
-    <value>[grey]ログ: [/] {0}</value>
+    <value>ログ: {0}</value>
   </data>
   <data name="I18N_Start_Checking_Found" xml:space="preserve">
     <value>実行中のumamusume.exeが{0}個検出されました</value>
@@ -185,7 +185,7 @@
     <value>umamusume.exeが実行中であることが検出され、直接サーバーを起動</value>
   </data>
   <data name="I18N_Start_GetToken" xml:space="preserve">
-    <value>[bold blue]DMM Onetime Tokenを取得中[/]</value>
+    <value>DMM One-time Tokenを取得中</value>
   </data>
   <data name="I18N_Start_TokenGot" xml:space="preserve">
     <value>DMM Onetime Tokenを取得しました</value>
@@ -197,7 +197,7 @@
     <value>umamusume.exeを起動中</value>
   </data>
   <data name="I18N_Start_Started" xml:space="preserve">
-    <value>[bold green]起動しました[/]</value>
+    <value>起動しました</value>
   </data>
   <data name="I18N_AppLaunchCanceled" xml:space="preserve">
     <value>クライアント起動がキャンセルされました</value>
@@ -320,13 +320,13 @@
     <value>ゲームファイルをダウンロード中 {0}/{1}</value>
   </data>
   <data name="I18N_Download_Complete" xml:space="preserve">
-    <value>[bold green]ダウンロード完了[/]</value>
+    <value>ダウンロード完了</value>
   </data>
   <data name="I18N_Download_Failed" xml:space="preserve">
     <value>ダウンロードに失敗: {0}</value>
   </data>
   <data name="I18N_Download_FilesUpToDate" xml:space="preserve">
-    <value>[bold green]すべてのファイルは最新です[/]</value>
+    <value>すべてのファイルは最新です</value>
   </data>
   <data name="I18N_Download_NoAccount" xml:space="preserve">
     <value>アカウントが設定されていません。先にアカウントを追加してください</value>

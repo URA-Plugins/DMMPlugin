@@ -173,10 +173,10 @@ Do you want to enable this feature?</value>
     <value>Multiple accounts found, please choose which one to start</value>
   </data>
   <data name="I18N_Start_Checking" xml:space="preserve">
-    <value>[yellow]Detecting if umamusume.exe is running[/]</value>
+    <value>Detecting if umamusume.exe is running</value>
   </data>
   <data name="I18N_Start_Checking_Log" xml:space="preserve">
-    <value>[grey]Log: [/] {0}</value>
+    <value>Log: {0}</value>
   </data>
   <data name="I18N_Start_Checking_Found" xml:space="preserve">
     <value>Detected {0} instances of umamusume.exe running</value>
@@ -185,7 +185,7 @@ Do you want to enable this feature?</value>
     <value>Detected umamusume.exe is running, directly starting the server</value>
   </data>
   <data name="I18N_Start_GetToken" xml:space="preserve">
-    <value>[bold blue]Acquiring DMM One-time Token[/]</value>
+    <value>Acquiring DMM One-time Token</value>
   </data>
   <data name="I18N_Start_TokenGot" xml:space="preserve">
     <value>DMM One-time Token acquired</value>
@@ -197,7 +197,7 @@ Do you want to enable this feature?</value>
     <value>Starting umamusume.exe</value>
   </data>
   <data name="I18N_Start_Started" xml:space="preserve">
-    <value>[bold green]Launched[/]</value>
+    <value>Launched</value>
   </data>
   <data name="I18N_AppLaunchCanceled" xml:space="preserve">
     <value>Client launch cancelled</value>
@@ -320,13 +320,13 @@ Do you want to enable this feature?</value>
     <value>Downloading game files {0}/{1}</value>
   </data>
   <data name="I18N_Download_Complete" xml:space="preserve">
-    <value>[bold green]Download complete[/]</value>
+    <value>Download complete</value>
   </data>
   <data name="I18N_Download_Failed" xml:space="preserve">
     <value>Download failed: {0}</value>
   </data>
   <data name="I18N_Download_FilesUpToDate" xml:space="preserve">
-    <value>[bold green]All files are up to date[/]</value>
+    <value>All files are up to date</value>
   </data>
   <data name="I18N_Download_NoAccount" xml:space="preserve">
     <value>No account configured, please add an account first</value>

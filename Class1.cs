@@ -1,75 +1,159 @@
-using Newtonsoft.Json.Linq;
-using Spectre.Console;
-using System.IO.Compression;
-using UmamusumeResponseAnalyzer;
+using Terminal.Gui.App;
 using UmamusumeResponseAnalyzer.Plugin;
+using UmamusumeResponseAnalyzer.TerminalGui;
 using static DMMPlugin.i18n.DMM;
-using static UmamusumeResponseAnalyzer.Plugin.UraEvents;
 
 namespace DMMPlugin;
 
 public class DMMPlugin : IPlugin
 {
-    public string Name => "DMM插件";
-    public string Author => "Lipi";
-    public string[] Targets => ["Cygames"];
+    // Startup and configuration can both refresh tokens and save the same settings file.
+    readonly SemaphoreSlim operationGate = new(1, 1);
 
-    [PluginSetting]
+    public string DataDirectory => Path.Combine("PluginData", "DMM插件");
+    public string SettingsFilePath => Path.Combine(DataDirectory, "settings.yaml");
+
     public DMMConfig.DMMLauncherInfomation LauncherInfomation { get; set; } = new();
 
-    [PluginSetting]
     public DMMConfig.DMMMachineInformation MachineInformation { get; set; } = new();
 
-    [PluginSetting]
     public List<DMMConfig.DMMAccountInformation> Accounts { get; set; } = [];
 
-    [PluginSetting]
     public bool Enable { get; set; }
 
-    [PluginSetting]
     public string LastUsedAccountName { get; set; } = string.Empty;
 
-    public void Initialize()
+    public void Initialize(IPluginContext context)
     {
-        Directory.CreateDirectory(Path.Combine("PluginData", Name));
-        PluginSettingsManager.LoadSettings(this);
+        DMMDisplay.SetStatusText("等待 URA 启动。");
+        Directory.CreateDirectory(DataDirectory);
+        LoadSettings();
         SyncToStatic();
         DMM.PluginInstance = this;
-        OnStarted += OnUraStarted;
+        context.Events.OnStarted(
+            cancellationToken => RunOnUraStartedAsync(context.Application, cancellationToken));
     }
 
-    private async Task OnUraStarted()
+    async ValueTask RunOnUraStartedAsync(
+        IApplication application,
+        CancellationToken cancellationToken)
     {
-        if (!DMMConfig.Enable || DMMConfig.Accounts.Count == 0) return;
-
-        if (DMMConfig.Accounts.Count == 1)
+        try
         {
-            await DMM.RunUmamusume(DMMConfig.Accounts[0]);
+            await operationGate.WaitAsync(cancellationToken);
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (!DMMConfig.Enable)
+                {
+                    DMMDisplay.SetStatusText("已禁用。");
+                    return;
+                }
+
+                if (DMMConfig.Accounts.Count == 0)
+                {
+                    DMMDisplay.SetStatusText(I18N_Download_NoAccount);
+                    return;
+                }
+
+                var account = DMMConfig.Accounts.Count == 1
+                    ? DMMConfig.Accounts[0]
+                    : await DMMConfigDialog.SelectLaunchAccountAsync(
+                        application,
+                        DMMConfig.Accounts,
+                        cancellationToken);
+                if (account is null)
+                {
+                    DMMDisplay.SetStatusText(I18N_AppLaunchCanceled);
+                    return;
+                }
+
+                await DMM.RunUmamusume(account);
+            }
+            finally
+            {
+                operationGate.Release();
+            }
         }
-        else
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            var choices = DMMConfig.Accounts.Select(x => x.Name).ToList();
-            choices.Add(I18N_Cancel);
-
-            var prompt = AnsiConsole.Prompt(new SelectionPrompt<string>()
-                .Title(I18N_MultipleAccountsFound)
-                .WrapAround(true)
-                .AddChoices(choices));
-
-            if (prompt == I18N_Cancel) return;
-
-            var account = DMMConfig.Accounts.Find(x => x.Name == prompt);
-            if (account != default) await DMM.RunUmamusume(account);
+            DMMDisplay.SetStatusText(I18N_AppLaunchCanceled);
+        }
+        catch (Exception ex)
+        {
+            var failure = string.Format(I18N_Launch_Failed, ex.Message);
+            DMMDisplay.SetStatusText(failure);
+            DMMDisplay.Log(ex.ToString(), UiSeverity.Error);
+            DMMDisplay.Notify(failure, UiSeverity.Error);
         }
     }
 
-    public async Task ConfigPromptAsync()
+    public async Task ConfigPromptAsync(
+        IApplication application,
+        CancellationToken cancellationToken = default)
     {
-        PluginSettingsManager.LoadSettings(this);
-        SyncToStatic();
-        await DMMConfig.Prompt();
-        SyncFromStatic();
-        PluginSettingsManager.SaveSettings(this);
+        await operationGate.WaitAsync(cancellationToken);
+        try
+        {
+            var result = await DMMConfigDialog.EditAsync(
+                application,
+                DMMPluginSettings.Load(SettingsFilePath),
+                cancellationToken);
+
+            ApplySettings(result.Settings);
+            SyncToStatic();
+            SaveSettings();
+
+            foreach (var association in result.SaveDataAssociations)
+                association.Account.HandleFirstTimeSaveDataAssociation(association.IsCurrentAccount);
+
+            if (result.UpdateAccount is not null)
+            {
+                var installDir = Path.GetDirectoryName(DMMConfig.MachineInformation.umamusume_file_path)
+                    ?? throw new InvalidOperationException("赛马娘可执行文件路径没有父目录。");
+                var (fileListUrl, sign, latestVersion) = await DMM.GetFileListAsync(result.UpdateAccount);
+                await DMM.DownloadGameAsync(
+                    result.UpdateAccount,
+                    installDir,
+                    fileListUrl,
+                    sign,
+                    latestVersion);
+            }
+        }
+        finally
+        {
+            operationGate.Release();
+        }
+    }
+
+    public void Dispose()
+    {
+        DMM.PluginInstance = null;
+        operationGate.Dispose();
+    }
+
+    internal void LoadSettings()
+        => ApplySettings(DMMPluginSettings.Load(SettingsFilePath));
+
+    void ApplySettings(DMMPluginSettings settings)
+    {
+        LauncherInfomation = settings.LauncherInfomation;
+        MachineInformation = settings.MachineInformation;
+        Accounts = settings.Accounts;
+        Enable = settings.Enable;
+        LastUsedAccountName = settings.LastUsedAccountName;
+    }
+
+    internal void SaveSettings()
+    {
+        new DMMPluginSettings
+        {
+            LauncherInfomation = LauncherInfomation,
+            MachineInformation = MachineInformation,
+            Accounts = Accounts,
+            Enable = Enable,
+            LastUsedAccountName = LastUsedAccountName
+        }.Save(SettingsFilePath);
     }
 
     /// <summary>将实例属性同步到 DMMConfig 静态类（供业务逻辑访问）</summary>
@@ -82,7 +166,6 @@ public class DMMPlugin : IPlugin
         DMMConfig.LastUsedAccountName = LastUsedAccountName;
     }
 
-    /// <summary>从 DMMConfig 静态类同步回实例属性（用于保存）</summary>
     internal void SyncFromStatic()
     {
         LauncherInfomation = DMMConfig.LauncherInfomation;
@@ -90,51 +173,5 @@ public class DMMPlugin : IPlugin
         Accounts = DMMConfig.Accounts;
         Enable = DMMConfig.Enable;
         LastUsedAccountName = DMMConfig.LastUsedAccountName;
-    }
-
-    public async Task UpdatePlugin(ProgressContext ctx)
-    {
-        var progress = ctx.AddTask($"[[{Name}]] Updating");
-
-        using var client = new HttpClient();
-        using var resp = await client.GetAsync($"https://api.github.com/repos/URA-Plugins/{Name}/releases/latest");
-        var json = await resp.Content.ReadAsStringAsync();
-        var jo = JObject.Parse(json);
-
-        var isLatest = $"v{((IPlugin)this).Version}" == $"v{jo["tag_name"]}";
-        if (isLatest)
-        {
-            progress.Increment(progress.MaxValue);
-            progress.StopTask();
-            return;
-        }
-        progress.Increment(25);
-
-        var downloadUrl = jo["assets"]?[0]?["browser_download_url"]?.ToString().AllowMirror();
-        using var msg = await client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
-        var contentLength = msg.Content.Headers.ContentLength ?? 0;
-
-        // 下载到 MemoryStream，避免 stream 读完后无法被 ZipArchive 使用
-        using var memoryStream = new MemoryStream();
-        await using (var stream = await msg.Content.ReadAsStreamAsync())
-        {
-            var buffer = new byte[8192];
-            int read;
-            while ((read = await stream.ReadAsync(buffer)) > 0)
-            {
-                memoryStream.Write(buffer, 0, read);
-                if (contentLength > 0)
-                {
-                    progress.Increment((double)read / contentLength * 50);
-                }
-            }
-        }
-
-        memoryStream.Position = 0;
-        using var archive = new ZipArchive(memoryStream);
-        archive.ExtractToDirectory(Path.Combine("Plugins", Name), true);
-        progress.Increment(25);
-
-        progress.StopTask();
     }
 }

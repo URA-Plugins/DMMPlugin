@@ -1,6 +1,5 @@
 using System.Net;
 using System.Text;
-using UmamusumeResponseAnalyzer.Plugin;
 using static DMMPlugin.DMMConfig;
 
 namespace DMMPlugin;
@@ -12,15 +11,15 @@ internal static partial class DMM
 {
     private const string ApiBase = "https://apidgp-gameplayer.games.dmm.com/v5";
 
-    internal static DMMPlugin PluginInstance { get; set; } = null!;
+    internal static DMMPlugin? PluginInstance { get; set; }
 
     public static bool IgnoreExistProcess = false;
 
-    private static void SavePluginConfig()
+    internal static void SavePluginConfig()
     {
         if (PluginInstance == null) return;
         PluginInstance.SyncFromStatic();
-        PluginSettingsManager.SaveSettings(PluginInstance);
+        PluginInstance.SaveSettings();
     }
 
     private static HttpClient GetHttpClient()

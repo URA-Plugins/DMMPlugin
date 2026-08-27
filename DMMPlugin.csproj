@@ -1,23 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<IsUraPlugin>true</IsUraPlugin>
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Version>2026.3.25</Version>
+		<!-- 自动把本插件的 NuGet 依赖闭包拷到输出。 -->
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+		<PluginInternalName>DMMPlugin</PluginInternalName>
+		<PluginDisplayName>DMM插件</PluginDisplayName>
+		<PluginAuthor>Lipi</PluginAuthor>
+		<PluginTargets>Cygames</PluginTargets>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\UmamusumeResponseAnalyzer\UmamusumeResponseAnalyzer\UmamusumeResponseAnalyzer.csproj">
-			<Private>False</Private>
-		</ProjectReference>
-		<PackageReference Include="AssetsTools.NET" Version="3.0.4" GeneratePathProperty="true" />
-		<PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.5" GeneratePathProperty="true" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.5" />
+		<PackageReference Include="YamlDotNet" Version="18.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="$(PkgAssetsTools_NET)\lib\netstandard2.0\AssetsTools.NET.dll" CopyToOutputDirectory="PreserveNewest" />
-		<None Include="$(PkgSystem_Security_Cryptography_ProtectedData)\lib\net10.0\System.Security.Cryptography.ProtectedData.dll" CopyToOutputDirectory="PreserveNewest" />
+		<Compile Remove="tests\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -40,5 +45,4 @@
 			<SubType>Designer</SubType>
 		</EmbeddedResource>
 	</ItemGroup>
-
 </Project>

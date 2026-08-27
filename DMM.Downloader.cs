@@ -1,7 +1,7 @@
 using Newtonsoft.Json.Linq;
-using Spectre.Console;
 using System.Security.Cryptography;
 using System.Text;
+using UmamusumeResponseAnalyzer.TerminalGui;
 using static DMMPlugin.DMMConfig;
 using static DMMPlugin.i18n.DMM;
 
@@ -9,7 +9,7 @@ namespace DMMPlugin;
 
 internal static partial class DMM
 {
-    private record FileEntry(string LocalPath, string RemotePath, long Size, string Hash, bool CheckHash, bool ForceDelete);
+    private record FileEntry(string LocalPath, string RemotePath, string Hash, bool CheckHash, bool ForceDelete);
     private const string ProductId = "umamusume";
 
     /// <summary>
@@ -67,7 +67,6 @@ internal static partial class DMM
         var files = data["file_list"]!.Select(f => new FileEntry(
             f["local_path"]!.ToString(),
             f["path"]!.ToString(),
-            f["size"]!.ToObject<long>(),
             f["hash"]!.ToString(),
             f["check_hash_flg"]!.ToObject<bool>(),
             f["force_delete_flg"]!.ToObject<bool>()
@@ -82,127 +81,128 @@ internal static partial class DMM
     {
         if (!await EnsureAccessToken(account))
         {
-            AnsiConsole.MarkupLine(I18N_Token_CannotGetValid);
+            DMMDisplay.Log(
+                string.Format(I18N_Start_Checking_Log, I18N_Token_CannotGetValid),
+                UiSeverity.Error);
+            DMMDisplay.SetStatusText(I18N_Token_CannotGetValid);
+            DMMDisplay.Notify(I18N_Token_CannotGetValid, UiSeverity.Error);
             return;
         }
 
         var filesToDownload = new Dictionary<string, List<FileEntry>>();
-        long downloadTotalSize = 0;
 
         try
         {
             // 步骤1-3：获取文件信息并检查需要更新的文件
-            await AnsiConsole.Status().StartAsync(I18N_Download_GettingInstallInfo, async ctx =>
+            DMMDisplay.SetStatusText(I18N_Download_GettingInstallInfo);
+            DMMDisplay.Log(string.Format(
+                I18N_Start_Checking_Log,
+                string.Format(I18N_Download_LatestVersion, latestVersion)));
+            var totalPages = await GetFileTotalPagesAsync(account, fileListUrl);
+
+            var allFiles = new Dictionary<string, List<FileEntry>>();
+            for (var page = 1; page <= totalPages; page++)
             {
-                ctx.Spinner(Spinner.Known.BouncingBar);
+                var (domain, files) = await GetFilePageAsync(account, fileListUrl, page);
+                allFiles.TryAdd(domain, []);
+                allFiles[domain].AddRange(files);
+            }
 
-                AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_Download_LatestVersion, latestVersion)));
-                // 步骤2：获取文件列表总页数
-                var totalPages = await GetFileTotalPagesAsync(account, fileListUrl);
-
-                // 步骤3：获取所有页的文件列表
-                var allFiles = new Dictionary<string, List<FileEntry>>();
-                for (int page = 1; page <= totalPages; page++)
+            DMMDisplay.SetStatusText(I18N_Download_CheckingFiles);
+            foreach (var (domain, files) in allFiles)
+            {
+                foreach (var file in files)
                 {
-                    var (d, files) = await GetFilePageAsync(account, fileListUrl, page);
-                    allFiles.TryAdd(d, []);
-                    allFiles[d].AddRange(files);
-                }
+                    var localPath = Path.Combine(
+                        installDir,
+                        file.LocalPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
 
-                // 检查哪些文件需要更新
-                ctx.Status(I18N_Download_CheckingFiles);
-                foreach (var (domain, files) in allFiles)
-                {
-                    foreach (var file in files)
+                    if (file.ForceDelete && File.Exists(localPath))
                     {
-                        var localPath = Path.Combine(installDir, file.LocalPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
-
-                        if (file.ForceDelete && File.Exists(localPath))
-                        {
-                            File.Delete(localPath);
-                            continue;
-                        }
-
-                        if (file.CheckHash && File.Exists(localPath))
-                        {
-                            await using var fs = File.OpenRead(localPath);
-                            var hash = Convert.ToHexStringLower(await MD5.HashDataAsync(fs));
-                            if (hash == file.Hash) continue;
-                        }
-
-                        filesToDownload.TryAdd(domain, []);
-                        filesToDownload[domain].Add(file);
+                        File.Delete(localPath);
+                        continue;
                     }
-                }
 
-                downloadTotalSize = filesToDownload.Values.SelectMany(x => x).Sum(x => x.Size);
-            });
+                    if (file.CheckHash && File.Exists(localPath))
+                    {
+                        await using var fs = File.OpenRead(localPath);
+                        var hash = Convert.ToHexStringLower(await MD5.HashDataAsync(fs));
+                        if (hash == file.Hash)
+                            continue;
+                    }
+
+                    filesToDownload.TryAdd(domain, []);
+                    filesToDownload[domain].Add(file);
+                }
+            }
 
             if (filesToDownload.Count == 0)
             {
-                AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_Download_FilesUpToDate));
+                DMMDisplay.Log(
+                    string.Format(I18N_Start_Checking_Log, I18N_Download_FilesUpToDate),
+                    UiSeverity.Success);
+                DMMDisplay.SetStatusText(I18N_Download_FilesUpToDate);
                 return;
             }
 
-            // 步骤4：使用进度条并行下载文件
             using var cdnClient = GetCdnHttpClient(sign);
 
             var allEntries = filesToDownload.SelectMany(kv => kv.Value.Select(file => (domain: kv.Key, file))).ToList();
-            int completedCount = 0;
-
-            await AnsiConsole.Progress()
-                .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new DownloadedColumn(), new TransferSpeedColumn(), new RemainingTimeColumn())
-                .HideCompleted(true)
-                .StartAsync(async ctx =>
+            var completedCount = 0;
+            DMMDisplay.SetStatusText(string.Format(I18N_Download_Progress, 0, allEntries.Count));
+            await Parallel.ForEachAsync(
+                allEntries,
+                new ParallelOptions { MaxDegreeOfParallelism = 4 },
+                async (entry, cancellationToken) =>
                 {
-                    var totalFiles = allEntries.Count;
-                    var overallTask = ctx.AddTask(string.Format(I18N_Download_Progress, 0, totalFiles), maxValue: downloadTotalSize);
+                    var (domain, file) = entry;
+                    var localPath = Path.Combine(
+                        installDir,
+                        file.LocalPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                    Directory.CreateDirectory(Path.GetDirectoryName(localPath)!);
 
-                    await Parallel.ForEachAsync(allEntries, new ParallelOptions { MaxDegreeOfParallelism = 4 }, async (entry, ct) =>
+                    try
                     {
-                        var (domain, file) = entry;
-                        var localPath = Path.Combine(installDir, file.LocalPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
-                        Directory.CreateDirectory(Path.GetDirectoryName(localPath)!);
+                        var url = $"{domain}/{file.RemotePath}";
+                        using var response = await cdnClient.GetAsync(
+                            url,
+                            HttpCompletionOption.ResponseHeadersRead,
+                            cancellationToken);
+                        response.EnsureSuccessStatusCode();
 
-                        var fileName = Path.GetFileName(file.LocalPath);
-                        var fileTask = ctx.AddTask(fileName, maxValue: Math.Max(1, file.Size));
-
-                        try
+                        var tmpPath = localPath + ".tmp";
+                        await using (var fileStream = File.Create(tmpPath))
+                        await using (var httpStream =
+                                     await response.Content.ReadAsStreamAsync(cancellationToken))
                         {
-                            var url = $"{domain}/{file.RemotePath}";
-                            using var response = await cdnClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct);
-                            response.EnsureSuccessStatusCode();
-
-                            var tmpPath = localPath + ".tmp";
-                            await using (var fileStream = File.Create(tmpPath))
-                            await using (var httpStream = await response.Content.ReadAsStreamAsync(ct))
-                            {
-                                var buffer = new byte[65536];
-                                int read;
-                                while ((read = await httpStream.ReadAsync(buffer, ct)) > 0)
-                                {
-                                    await fileStream.WriteAsync(buffer.AsMemory(0, read), ct);
-                                    fileTask.Increment(read);
-                                    overallTask.Increment(read);
-                                }
-                            }
-
-                            File.Move(tmpPath, localPath, true);
+                            await httpStream.CopyToAsync(fileStream, cancellationToken);
                         }
-                        finally
-                        {
-                            fileTask.StopTask();
-                            var completed = Interlocked.Increment(ref completedCount);
-                            overallTask.Description = string.Format(I18N_Download_Progress, completed, totalFiles);
-                        }
-                    });
+
+                        File.Move(tmpPath, localPath, true);
+                    }
+                    finally
+                    {
+                        var completed = Interlocked.Increment(ref completedCount);
+                        DMMDisplay.SetStatusText(
+                            string.Format(I18N_Download_Progress, completed, allEntries.Count));
+                    }
                 });
 
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_Download_Complete));
+            DMMDisplay.Log(
+                string.Format(I18N_Start_Checking_Log, I18N_Download_Complete),
+                UiSeverity.Success);
+            DMMDisplay.SetStatusText(I18N_Download_Complete);
         }
         catch (Exception ex)
         {
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_Download_Failed, ex.Message)));
+            var failure = string.Format(I18N_Download_Failed, ex.Message);
+            DMMDisplay.Log(
+                string.Format(
+                    I18N_Start_Checking_Log,
+                    failure),
+                UiSeverity.Error);
+            DMMDisplay.SetStatusText(failure);
+            DMMDisplay.Notify(failure, UiSeverity.Error);
         }
     }
 }

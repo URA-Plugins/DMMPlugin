@@ -1,8 +1,8 @@
 using Newtonsoft.Json.Linq;
-using Spectre.Console;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using UmamusumeResponseAnalyzer.TerminalGui;
 using static DMMPlugin.DMMConfig;
 using static DMMPlugin.i18n.DMM;
 
@@ -142,7 +142,9 @@ internal static partial class DMM
         }
         catch (Exception ex)
         {
-            AnsiConsole.WriteLine(string.Format(I18N_Auth_TermsAgreeFailed, ex.Message));
+            DMMDisplay.Log(
+                string.Format(I18N_Auth_TermsAgreeFailed, ex.Message),
+                UiSeverity.Error);
             return false;
         }
     }
@@ -163,7 +165,9 @@ internal static partial class DMM
             return jo;
 
         // Token 已被服务端拒绝，强制刷新后重试一次
-        AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_DMMTokenExpired + I18N_Token_RetryAuth));
+        DMMDisplay.Log(
+            string.Format(I18N_Start_Checking_Log, I18N_DMMTokenExpired + I18N_Token_RetryAuth),
+            UiSeverity.Warning);
         if (!await EnsureAccessToken(account, forceRefresh: true))
             return jo; // 刷新失败，返回原 203 响应由调用方处理
 
@@ -183,11 +187,15 @@ internal static partial class DMM
 
         if (string.IsNullOrEmpty(account.Account) || string.IsNullOrEmpty(account.Password))
         {
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_Token_ExpiredNoCredentials));
+            DMMDisplay.Log(
+                string.Format(I18N_Start_Checking_Log, I18N_Token_ExpiredNoCredentials),
+                UiSeverity.Warning);
             return false;
         }
 
-        AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_Token_Refreshing, account.Account)));
+        DMMDisplay.Log(string.Format(
+            I18N_Start_Checking_Log,
+            string.Format(I18N_Token_Refreshing, account.Name)));
 
         try
         {
@@ -198,12 +206,22 @@ internal static partial class DMM
             account.access_token_expires_at = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + expiresIn - 60;
             SavePluginConfig();
 
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_Token_RefreshSuccess, DateTimeOffset.FromUnixTimeSeconds(account.access_token_expires_at.Value).ToLocalTime())));
+            DMMDisplay.Log(
+                string.Format(
+                    I18N_Start_Checking_Log,
+                    string.Format(
+                        I18N_Token_RefreshSuccess,
+                        DateTimeOffset.FromUnixTimeSeconds(account.access_token_expires_at.Value).ToLocalTime())),
+                UiSeverity.Success);
             return true;
         }
         catch (Exception ex)
         {
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_Token_RefreshFailed, ex.Message)));
+            DMMDisplay.Log(
+                string.Format(
+                    I18N_Start_Checking_Log,
+                    string.Format(I18N_Token_RefreshFailed, ex.Message)),
+                UiSeverity.Error);
             return false;
         }
     }

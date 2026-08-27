@@ -1,8 +1,8 @@
 using Newtonsoft.Json.Linq;
-using Spectre.Console;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
+using UmamusumeResponseAnalyzer.TerminalGui;
 using static DMMPlugin.DMMConfig;
 using static DMMPlugin.i18n.DMM;
 
@@ -11,7 +11,7 @@ namespace DMMPlugin;
 internal static partial class DMM
 {
     /// <summary>
-    /// 获取游戏启动参数。若检测到版本更新，通过 pendingDownload 返回下载信息，由调用方在 Spectre.Console 交互上下文之外执行下载。
+    /// 获取游戏启动参数。若检测到版本更新，通过 pendingDownload 返回下载信息。
     /// </summary>
     public static async Task<(string executeArgs, string error, (string fileListUrl, string sign, string latestVersion, string installDir)? pendingDownload)> GetExecuteArgsAsync(DMMAccountInformation account)
     {
@@ -26,7 +26,9 @@ internal static partial class DMM
         // 308: 需要同意条款
         if (resultCode == 308)
         {
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_Terms_Required));
+            DMMDisplay.Log(
+                string.Format(I18N_Start_Checking_Log, I18N_Terms_Required),
+                UiSeverity.Warning);
             if (await AgreeToTerms(account))
             {
                 json = await PostWithAuthAsync(account, launchUrl, jsonContent);
@@ -58,65 +60,69 @@ internal static partial class DMM
     /// </summary>
     public static async Task RunUmamusume(DMMAccountInformation account)
     {
-        string executeArgs = string.Empty;
+        var executeArgs = string.Empty;
         (string fileListUrl, string sign, string latestVersion, string installDir)? pendingDownload = null;
-        bool abort = false;
 
-        await AnsiConsole.Status().StartAsync(I18N_Start_Checking, async ctx =>
+        DMMDisplay.SetStatusText(I18N_Start_Checking);
+        var processes = Process.GetProcessesByName("umamusume");
+        try
         {
-            var processes = Process.GetProcessesByName("umamusume");
-            try
+            DMMDisplay.Log(string.Format(
+                I18N_Start_Checking_Log,
+                string.Format(I18N_Start_Checking_Found, processes.Length)));
+            if (processes.Length > 0 && !IgnoreExistProcess)
             {
-                AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_Start_Checking_Found, processes.Length)));
-                if (processes.Length == 0 || IgnoreExistProcess)
-                {
-                    ctx.Spinner(Spinner.Known.BouncingBar);
-                    ctx.Status(I18N_Start_GetToken);
-
-                    SaveLastAccountSaveDataIfSwitched(account);
-
-                    if (!await EnsureAccessToken(account))
-                    {
-                        AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_Token_CannotGetValid));
-                        abort = true;
-                        return;
-                    }
-
-                    var (args, error, update) = await GetExecuteArgsAsync(account);
-
-                    if (!string.IsNullOrEmpty(error))
-                    {
-                        AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, error));
-                        abort = true;
-                        return;
-                    }
-
-                    if (string.IsNullOrEmpty(args))
-                    {
-                        AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_Start_TokenFailed));
-                        abort = true;
-                        return;
-                    }
-
-                    AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_Start_TokenGot));
-                    executeArgs = args;
-                    pendingDownload = update;
-                }
-                else
-                {
-                    ctx.Status(I18N_Start_Checking_AlreadyRunning);
-                    abort = true;
-                }
+                DMMDisplay.SetStatusText(I18N_Start_Checking_AlreadyRunning);
+                return;
             }
-            finally
+
+            DMMDisplay.SetStatusText(I18N_Start_GetToken);
+            SaveLastAccountSaveDataIfSwitched(account);
+
+            if (!await EnsureAccessToken(account))
             {
-                foreach (var process in processes) process.Dispose();
+                DMMDisplay.Log(
+                    string.Format(I18N_Start_Checking_Log, I18N_Token_CannotGetValid),
+                    UiSeverity.Error);
+                DMMDisplay.SetStatusText(I18N_Token_CannotGetValid);
+                DMMDisplay.Notify(I18N_Token_CannotGetValid, UiSeverity.Error);
+                return;
             }
-        });
 
-        if (abort) return;
+            var (args, error, update) = await GetExecuteArgsAsync(account);
 
-        // 下载必须在 AnsiConsole.Status 上下文之外执行，避免并发交互式显示冲突
+            if (!string.IsNullOrEmpty(error))
+            {
+                DMMDisplay.Log(
+                    string.Format(I18N_Start_Checking_Log, error),
+                    UiSeverity.Error);
+                DMMDisplay.SetStatusText(error);
+                DMMDisplay.Notify(error, UiSeverity.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(args))
+            {
+                DMMDisplay.Log(
+                    string.Format(I18N_Start_Checking_Log, I18N_Start_TokenFailed),
+                    UiSeverity.Error);
+                DMMDisplay.SetStatusText(I18N_Start_TokenFailed);
+                DMMDisplay.Notify(I18N_Start_TokenFailed, UiSeverity.Error);
+                return;
+            }
+
+            DMMDisplay.Log(
+                string.Format(I18N_Start_Checking_Log, I18N_Start_TokenGot),
+                UiSeverity.Success);
+            executeArgs = args;
+            pendingDownload = update;
+        }
+        finally
+        {
+            foreach (var process in processes)
+                process.Dispose();
+        }
+
         if (pendingDownload.HasValue)
         {
             var (fileListUrl, sign, latestVersion, installDir) = pendingDownload.Value;
@@ -125,7 +131,11 @@ internal static partial class DMM
 
         if (!LoadAccountSaveDataIfSwitched(account))
         {
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_Launch_SaveDataFailed));
+            DMMDisplay.Log(
+                string.Format(I18N_Start_Checking_Log, I18N_Launch_SaveDataFailed),
+                UiSeverity.Error);
+            DMMDisplay.SetStatusText(I18N_Launch_SaveDataFailed);
+            DMMDisplay.Notify(I18N_Launch_SaveDataFailed, UiSeverity.Error);
             return;
         }
 
@@ -149,11 +159,17 @@ internal static partial class DMM
         try
         {
             File.Copy(DMMAccountInformation.DefaultSaveDataPath, lastAccount.SaveDataPath, true);
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_SaveData_SavedForAccount, lastAccount.Name)));
+            DMMDisplay.Log(string.Format(
+                I18N_Start_Checking_Log,
+                string.Format(I18N_SaveData_SavedForAccount, lastAccount.Name)));
         }
         catch (Exception ex)
         {
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_SaveData_SaveFailed, ex.Message)));
+            DMMDisplay.Log(
+                string.Format(
+                    I18N_Start_Checking_Log,
+                    string.Format(I18N_SaveData_SaveFailed, ex.Message)),
+                UiSeverity.Warning);
         }
     }
 
@@ -164,7 +180,7 @@ internal static partial class DMM
     {
         if (LastUsedAccountName == account.Account)
         {
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_SaveData_SameAccountSkip));
+            DMMDisplay.Log(string.Format(I18N_Start_Checking_Log, I18N_SaveData_SameAccountSkip));
             return true;
         }
 
@@ -172,23 +188,33 @@ internal static partial class DMM
         {
             if (!File.Exists(account.SaveDataPath))
             {
-                AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_SaveData_NewArchiveWillBeCreated, Path.GetFileName(account.SaveDataPath))));
+                DMMDisplay.Log(string.Format(
+                    I18N_Start_Checking_Log,
+                    string.Format(
+                        I18N_SaveData_NewArchiveWillBeCreated,
+                        Path.GetFileName(account.SaveDataPath))));
                 return true;
             }
 
             if (File.Exists(DMMAccountInformation.DefaultSaveDataPath))
             {
                 File.Copy(DMMAccountInformation.DefaultSaveDataPath, DMMAccountInformation.DefaultSaveDataPath + ".backup", true);
-                AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_SaveData_BackupCreated));
+                DMMDisplay.Log(string.Format(I18N_Start_Checking_Log, I18N_SaveData_BackupCreated));
             }
 
             File.Copy(account.SaveDataPath, DMMAccountInformation.DefaultSaveDataPath, true);
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_SaveData_Loaded, account.Name).EscapeMarkup()));
+            DMMDisplay.Log(string.Format(
+                I18N_Start_Checking_Log,
+                string.Format(I18N_SaveData_Loaded, account.Name)));
             return true;
         }
         catch (Exception ex)
         {
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_SaveData_LoadFailed, ex.Message)));
+            DMMDisplay.Log(
+                string.Format(
+                    I18N_Start_Checking_Log,
+                    string.Format(I18N_SaveData_LoadFailed, ex.Message)),
+                UiSeverity.Error);
             return false;
         }
     }
@@ -204,11 +230,15 @@ internal static partial class DMM
                 UseShellExecute = true,
                 Verb = "runas"
             });
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_Start_Started));
+            DMMDisplay.Log(
+                string.Format(I18N_Start_Checking_Log, I18N_Start_Started),
+                UiSeverity.Success);
+            DMMDisplay.SetStatusText(I18N_Start_Started);
         }
         catch (Win32Exception)
         {
-            AnsiConsole.WriteLine(I18N_AppLaunchCanceled);
+            DMMDisplay.Notify(I18N_AppLaunchCanceled, UiSeverity.Warning);
+            DMMDisplay.SetStatusText(I18N_AppLaunchCanceled);
         }
     }
 }
