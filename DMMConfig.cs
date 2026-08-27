@@ -97,9 +97,6 @@ public static class DMMConfig
         public string UserAgent { get; set; } = "DMMGamePlayer5-Win/5.4.2 Electron/34.3.0";
         public string ClientApp { get; set; } = "DMMGamePlayer5";
         public string ClientVersion { get; set; } = "5.4.2";
-        public string SecFetchDest { get; set; } = "empty";
-        public string SecFetchMode { get; set; } = "no-cors";
-        public string SecFetchSite { get; set; } = "none";
 
         public void Prompt()
         {
@@ -157,12 +154,25 @@ public static class DMMConfig
 
     public class DMMAccountInformation
     {
+        internal static string SaveDataDirectory =>
+            Path.Combine(Path.GetDirectoryName(MachineInformation.umamusume_file_path) ?? throw new FileNotFoundException(), "umamusume_Data", "Persistent", "d");
+        [YamlIgnore]
+        internal static string DefaultSaveDataPath => Path.Combine(SaveDataDirectory, "SaveData.db");
+
         [YamlMember(Alias = "name", ApplyNamingConventions = false)]
         public string Name { get; set; } = string.Empty;
         [YamlMember(Alias = "account", ApplyNamingConventions = false)]
         public string Account { get; set; } = string.Empty;
         [YamlMember(Alias = "password", ApplyNamingConventions = false)]
-        public string Password { get; set; } = string.Empty;
+        public string PasswordEncrypted { get; set; } = string.Empty;
+
+        [YamlIgnore]
+        public string Password
+        {
+            get => SecurePassword.Decrypt(PasswordEncrypted);
+            set => PasswordEncrypted = SecurePassword.Encrypt(value);
+        }
+
         [YamlMember(Alias = "access-token", ApplyNamingConventions = false)]
         public string access_token { get; set; } = string.Empty;
         [YamlMember(Alias = "access-token-expires-at", ApplyNamingConventions = false)]
@@ -238,7 +248,7 @@ public static class DMMConfig
 
             if (isThisAccount)
             {
-                if (HasDedicatedSavePath && !File.Exists(SaveDataPath))
+                if (!File.Exists(SaveDataPath))
                 {
                     try
                     {
@@ -276,21 +286,7 @@ public static class DMMConfig
             return DateTimeOffset.UtcNow.ToUnixTimeSeconds() < (access_token_expires_at.Value - 60);
         }
 
-        private static string SaveDataDirectory =>
-            Path.Combine(Path.GetDirectoryName(MachineInformation.umamusume_file_path) ?? "", "umamusume_Data", "Persistent", "d");
-
-        public string SaveDataPath =>
-            string.IsNullOrEmpty(AccountHash)
-                ? DefaultSaveDataPath
-                : Path.Combine(SaveDataDirectory, $"SaveData.db.{AccountHash}");
-
-        public string DefaultSaveDataPath => Path.Combine(SaveDataDirectory, "SaveData.db");
-
-        public bool HasDedicatedSavePath => !string.IsNullOrEmpty(AccountHash);
-
-        public string AccountHash => string.IsNullOrEmpty(Account) ? string.Empty : ComputeHash(Account);
-
-        private static string ComputeHash(string input) =>
-            Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(input)))[..8];
+        [YamlIgnore]
+        public string SaveDataPath => Path.Combine(SaveDataDirectory, $"SaveData.db.{Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(Account)))[..8]}");
     }
 }

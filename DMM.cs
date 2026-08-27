@@ -320,13 +320,13 @@ internal static partial class DMM
         if (string.IsNullOrEmpty(LastUsedAccountName) || LastUsedAccountName == currentAccount.Account)
             return;
 
-        var lastAccount = Accounts.FirstOrDefault(x => x.Account == LastUsedAccountName);
-        if (lastAccount?.HasDedicatedSavePath != true || !File.Exists(lastAccount.DefaultSaveDataPath))
+        var lastAccount = Accounts.First(x => x.Account == LastUsedAccountName);
+        if (!File.Exists(DMMAccountInformation.DefaultSaveDataPath))
             return;
 
         try
         {
-            File.Copy(lastAccount.DefaultSaveDataPath, lastAccount.SaveDataPath, true);
+            File.Copy(DMMAccountInformation.DefaultSaveDataPath, lastAccount.SaveDataPath, true);
             AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_SaveData_SavedForAccount, lastAccount.Name)));
         }
         catch (Exception ex)
@@ -340,12 +340,6 @@ internal static partial class DMM
     /// </summary>
     private static bool LoadAccountSaveDataIfSwitched(DMMAccountInformation account)
     {
-        if (string.IsNullOrEmpty(account.DefaultSaveDataPath))
-        {
-            AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_SaveData_PathNotDetermined));
-            return true;
-        }
-
         if (LastUsedAccountName == account.Account)
         {
             AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_SaveData_SameAccountSkip));
@@ -354,27 +348,19 @@ internal static partial class DMM
 
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(account.DefaultSaveDataPath)!);
-
-            if (!account.HasDedicatedSavePath)
-            {
-                AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_SaveData_UsingDefault));
-                return true;
-            }
-
             if (!File.Exists(account.SaveDataPath))
             {
                 AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_SaveData_NewArchiveWillBeCreated, Path.GetFileName(account.SaveDataPath))));
                 return true;
             }
 
-            if (File.Exists(account.DefaultSaveDataPath))
+            if (File.Exists(DMMAccountInformation.DefaultSaveDataPath))
             {
-                File.Copy(account.DefaultSaveDataPath, account.DefaultSaveDataPath + ".backup", true);
+                File.Copy(DMMAccountInformation.DefaultSaveDataPath, DMMAccountInformation.DefaultSaveDataPath + ".backup", true);
                 AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, I18N_SaveData_BackupCreated));
             }
 
-            File.Copy(account.SaveDataPath, account.DefaultSaveDataPath, true);
+            File.Copy(account.SaveDataPath, DMMAccountInformation.DefaultSaveDataPath, true);
             AnsiConsole.MarkupLine(string.Format(I18N_Start_Checking_Log, string.Format(I18N_SaveData_Loaded, account.Name).EscapeMarkup()));
             return true;
         }
@@ -422,9 +408,6 @@ internal static partial class DMM
         client.DefaultRequestHeaders.Add("User-Agent", LauncherInfomation.UserAgent);
         client.DefaultRequestHeaders.Add("Client-App", LauncherInfomation.ClientApp);
         client.DefaultRequestHeaders.Add("Client-version", LauncherInfomation.ClientVersion);
-        client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", LauncherInfomation.SecFetchDest);
-        client.DefaultRequestHeaders.Add("Sec-Fetch-Mode", LauncherInfomation.SecFetchMode);
-        client.DefaultRequestHeaders.Add("Sec-Fetch-Site", LauncherInfomation.SecFetchSite);
 
         return client;
     }
