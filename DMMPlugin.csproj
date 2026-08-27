@@ -1,36 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <Version>2026.3.25</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>2026.3.25</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\UmamusumeResponseAnalyzer\UmamusumeResponseAnalyzer\UmamusumeResponseAnalyzer.csproj" />
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\UmamusumeResponseAnalyzer\UmamusumeResponseAnalyzer\UmamusumeResponseAnalyzer.csproj">
+			<Private>False</Private>
+		</ProjectReference>
+		<PackageReference Include="AssetsTools.NET" Version="3.0.4" GeneratePathProperty="true" />
+		<PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.5" GeneratePathProperty="true" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="i18n\DMM.Designer.cs">
-      <DependentUpon>DMM.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="$(PkgAssetsTools_NET)\lib\netstandard2.0\AssetsTools.NET.dll" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(PkgSystem_Security_Cryptography_ProtectedData)\lib\net10.0\System.Security.Cryptography.ProtectedData.dll" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="i18n\DMM.ja-JP.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Update="i18n\DMM.resx">
-      <LastGenOutput>DMM.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="i18n\DMM.zh-CN.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="i18n\DMM.Designer.cs">
+			<DependentUpon>DMM.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="i18n\DMM.ja-JP.resx">
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Update="i18n\DMM.resx">
+			<LastGenOutput>DMM.Designer.cs</LastGenOutput>
+			<Generator>ResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="i18n\DMM.zh-CN.resx">
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+	</ItemGroup>
 
 </Project>

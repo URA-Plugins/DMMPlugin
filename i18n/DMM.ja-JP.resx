@@ -303,6 +303,37 @@
   <data name="I18N_SaveData_LoadFailed" xml:space="preserve">
     <value>セーブデータの読み込みに失敗: {0}</value>
   </data>
+  <!-- Game Download/Update -->
+  <data name="I18N_Download_GettingInstallInfo" xml:space="preserve">
+    <value>ゲームのインストール情報を取得中...</value>
+  </data>
+  <data name="I18N_Download_InstallInfoFailed" xml:space="preserve">
+    <value>インストール情報の取得に失敗: {0}</value>
+  </data>
+  <data name="I18N_Download_LatestVersion" xml:space="preserve">
+    <value>最新バージョン: {0}</value>
+  </data>
+  <data name="I18N_Download_CheckingFiles" xml:space="preserve">
+    <value>ローカルファイルを確認中...</value>
+  </data>
+  <data name="I18N_Download_Progress" xml:space="preserve">
+    <value>ゲームファイルをダウンロード中 {0}/{1}</value>
+  </data>
+  <data name="I18N_Download_Complete" xml:space="preserve">
+    <value>[bold green]ダウンロード完了[/]</value>
+  </data>
+  <data name="I18N_Download_Failed" xml:space="preserve">
+    <value>ダウンロードに失敗: {0}</value>
+  </data>
+  <data name="I18N_Download_FilesUpToDate" xml:space="preserve">
+    <value>[bold green]すべてのファイルは最新です[/]</value>
+  </data>
+  <data name="I18N_Download_NoAccount" xml:space="preserve">
+    <value>アカウントが設定されていません。先にアカウントを追加してください</value>
+  </data>
+  <data name="Tabs_DMM_UpdateGame" xml:space="preserve">
+    <value>ゲームの更新/ダウンロード</value>
+  </data>
   <!-- Legacy/Unused -->
   <data name="I18N_AddAccount" xml:space="preserve">
     <value>アカウントを追加</value>

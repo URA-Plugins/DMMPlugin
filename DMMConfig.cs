@@ -15,7 +15,7 @@ public static class DMMConfig
     public static bool Enable { get; set; }
     public static string LastUsedAccountName { get; set; } = string.Empty;
 
-    public static void Prompt()
+    public static async Task Prompt()
     {
         if (!Enable)
         {
@@ -27,7 +27,7 @@ public static class DMMConfig
             {
                 Enable = true;
                 UmamusumeResponseAnalyzer.Config.Save();
-                Prompt();
+                await Prompt();
             }
             else
             {
@@ -41,7 +41,7 @@ public static class DMMConfig
             var selectionPrompt = new SelectionPrompt<string>()
                 .Title(Tabs_DMM_Title)
                 .WrapAround(true)
-                .AddChoices([Tabs_DMM_ViewLauncherInformation, Tabs_DMM_EditMachineInformation, Tabs_DMM_EditAccounts, Tabs_DMM_Enable])
+                .AddChoices([Tabs_DMM_ViewLauncherInformation, Tabs_DMM_EditMachineInformation, Tabs_DMM_EditAccounts, Tabs_DMM_UpdateGame, Tabs_DMM_Enable])
                 .AddChoices(Return);
             selected = AnsiConsole.Prompt(selectionPrompt).Split(':')[0];
             if (selected == Tabs_DMM_Enable)
@@ -56,6 +56,33 @@ public static class DMMConfig
             else if (selected == Tabs_DMM_EditMachineInformation)
             {
                 MachineInformation.Prompt();
+            }
+            else if (selected == Tabs_DMM_UpdateGame)
+            {
+                if (Accounts.Count == 0)
+                {
+                    AnsiConsole.MarkupLine(I18N_Download_NoAccount);
+                }
+                else
+                {
+                    DMMAccountInformation account;
+                    if (Accounts.Count == 1)
+                    {
+                        account = Accounts[0];
+                    }
+                    else
+                    {
+                        var accountName = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                            .Title(I18N_MultipleAccountsFound)
+                            .WrapAround(true)
+                            .AddChoices(Accounts.Select(x => x.Name)));
+                        account = Accounts.First(x => x.Name == accountName);
+                    }
+
+                    var installDir = Path.GetDirectoryName(MachineInformation.umamusume_file_path)!;
+                    var (fileListUrl, sign, latestVersion) = await DMM.GetFileListAsync(account);
+                    await DMM.DownloadGameAsync(account, installDir, fileListUrl, sign, latestVersion);
+                }
             }
             else if (selected == Tabs_DMM_EditAccounts)
             {
@@ -283,7 +310,7 @@ public static class DMMConfig
         {
             if (string.IsNullOrEmpty(access_token) || !access_token_expires_at.HasValue)
                 return false;
-            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() < (access_token_expires_at.Value - 60);
+            return DateTimeOffset.UtcNow.ToUnixTimeSeconds() < access_token_expires_at.Value;
         }
 
         [YamlIgnore]

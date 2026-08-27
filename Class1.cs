@@ -63,11 +63,11 @@ public class DMMPlugin : IPlugin
         }
     }
 
-    public void ConfigPrompt()
+    public async Task ConfigPromptAsync()
     {
         PluginSettingsManager.LoadSettings(this);
         SyncToStatic();
-        DMMConfig.Prompt();
+        await DMMConfig.Prompt();
         SyncFromStatic();
         PluginSettingsManager.SaveSettings(this);
     }

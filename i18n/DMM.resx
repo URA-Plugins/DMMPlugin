@@ -303,6 +303,37 @@ Do you want to enable this feature?</value>
   <data name="I18N_SaveData_LoadFailed" xml:space="preserve">
     <value>Failed to load save data: {0}</value>
   </data>
+  <!-- Game Download/Update -->
+  <data name="I18N_Download_GettingInstallInfo" xml:space="preserve">
+    <value>Getting game install info...</value>
+  </data>
+  <data name="I18N_Download_InstallInfoFailed" xml:space="preserve">
+    <value>Failed to get install info: {0}</value>
+  </data>
+  <data name="I18N_Download_LatestVersion" xml:space="preserve">
+    <value>Latest version: {0}</value>
+  </data>
+  <data name="I18N_Download_CheckingFiles" xml:space="preserve">
+    <value>Checking local files...</value>
+  </data>
+  <data name="I18N_Download_Progress" xml:space="preserve">
+    <value>Downloading game files {0}/{1}</value>
+  </data>
+  <data name="I18N_Download_Complete" xml:space="preserve">
+    <value>[bold green]Download complete[/]</value>
+  </data>
+  <data name="I18N_Download_Failed" xml:space="preserve">
+    <value>Download failed: {0}</value>
+  </data>
+  <data name="I18N_Download_FilesUpToDate" xml:space="preserve">
+    <value>[bold green]All files are up to date[/]</value>
+  </data>
+  <data name="I18N_Download_NoAccount" xml:space="preserve">
+    <value>No account configured, please add an account first</value>
+  </data>
+  <data name="Tabs_DMM_UpdateGame" xml:space="preserve">
+    <value>Update/Download Game</value>
+  </data>
   <!-- Legacy/Unused -->
   <data name="I18N_AddAccount" xml:space="preserve">
     <value>Add account</value>

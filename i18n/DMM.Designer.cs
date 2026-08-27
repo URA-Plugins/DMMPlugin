@@ -295,6 +295,87 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
+        ///   查找类似 Checking local files... 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Download_CheckingFiles {
+            get {
+                return ResourceManager.GetString("I18N_Download_CheckingFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 [bold green]Download complete[/] 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Download_Complete {
+            get {
+                return ResourceManager.GetString("I18N_Download_Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Download failed: {0} 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Download_Failed {
+            get {
+                return ResourceManager.GetString("I18N_Download_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 [bold green]All files are up to date[/] 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Download_FilesUpToDate {
+            get {
+                return ResourceManager.GetString("I18N_Download_FilesUpToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Getting game install info... 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Download_GettingInstallInfo {
+            get {
+                return ResourceManager.GetString("I18N_Download_GettingInstallInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Failed to get install info: {0} 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Download_InstallInfoFailed {
+            get {
+                return ResourceManager.GetString("I18N_Download_InstallInfoFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Latest version: {0} 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Download_LatestVersion {
+            get {
+                return ResourceManager.GetString("I18N_Download_LatestVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 No account configured, please add an account first 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Download_NoAccount {
+            get {
+                return ResourceManager.GetString("I18N_Download_NoAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Downloading game files {0}/{1} 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Download_Progress {
+            get {
+                return ResourceManager.GetString("I18N_Download_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Please enter a note for this account: 的本地化字符串。
         /// </summary>
         internal static string I18N_InputAccountCommentPrompt {
@@ -869,6 +950,15 @@ namespace DMMPlugin.i18n {
         internal static string Tabs_DMM_Title {
             get {
                 return ResourceManager.GetString("Tabs_DMM_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Update/Download Game 的本地化字符串。
+        /// </summary>
+        internal static string Tabs_DMM_UpdateGame {
+            get {
+                return ResourceManager.GetString("Tabs_DMM_UpdateGame", resourceCulture);
             }
         }
         
