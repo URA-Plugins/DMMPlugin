@@ -19,7 +19,7 @@ namespace DMMPlugin.i18n {
     // 类通过类似于 ResGen 或 Visual Studio 的工具自动生成的。
     // 若要添加或移除成员，请编辑 .ResX 文件，然后重新运行 ResGen
     // (以 /str 作为命令选项)，或重新生成 VS 项目。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class DMM {
@@ -47,8 +47,8 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   重写当前线程的 CurrentUICulture 属性，对
-        ///   使用此强类型资源类的所有资源查找执行重写。
+        ///   使用此强类型资源类，为所有资源查找
+        ///   重写当前线程的 CurrentUICulture 属性。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Globalization.CultureInfo Culture {
@@ -178,29 +178,11 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 Add account 的本地化字符串。
-        /// </summary>
-        internal static string I18N_AddAccount {
-            get {
-                return ResourceManager.GetString("I18N_AddAccount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Client launch cancelled 的本地化字符串。
         /// </summary>
         internal static string I18N_AppLaunchCanceled {
             get {
                 return ResourceManager.GetString("I18N_AppLaunchCanceled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Incorrect game path? 的本地化字符串。
-        /// </summary>
-        internal static string I18N_AppRootPathNull {
-            get {
-                return ResourceManager.GetString("I18N_AppRootPathNull", resourceCulture);
             }
         }
         
@@ -231,6 +213,15 @@ namespace DMMPlugin.i18n {
             }
         }
         
+        /// <summary>
+        ///   查找类似 Failed to get login form path 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Auth_PathNotFound {
+            get {
+                return ResourceManager.GetString("I18N_Auth_PathNotFound", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   查找类似 Failed to get OAuth redirect URL 的本地化字符串。
         /// </summary>
@@ -277,15 +268,6 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 Press Enter on the selected account to delete 的本地化字符串。
-        /// </summary>
-        internal static string I18N_DeleteAccountInstruction {
-            get {
-                return ResourceManager.GetString("I18N_DeleteAccountInstruction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 DMM Session has expired 的本地化字符串。
         /// </summary>
         internal static string I18N_DMMTokenExpired {
@@ -304,7 +286,7 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 [bold green]Download complete[/] 的本地化字符串。
+        ///   查找类似 Download complete 的本地化字符串。
         /// </summary>
         internal static string I18N_Download_Complete {
             get {
@@ -322,7 +304,7 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 [bold green]All files are up to date[/] 的本地化字符串。
+        ///   查找类似 All files are up to date 的本地化字符串。
         /// </summary>
         internal static string I18N_Download_FilesUpToDate {
             get {
@@ -372,78 +354,6 @@ namespace DMMPlugin.i18n {
         internal static string I18N_Download_Progress {
             get {
                 return ResourceManager.GetString("I18N_Download_Progress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Please enter a note for this account: 的本地化字符串。
-        /// </summary>
-        internal static string I18N_InputAccountCommentPrompt {
-            get {
-                return ResourceManager.GetString("I18N_InputAccountCommentPrompt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Please enter actauth: 的本地化字符串。
-        /// </summary>
-        internal static string I18N_InputActauthPrompt {
-            get {
-                return ResourceManager.GetString("I18N_InputActauthPrompt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Please enter hdd_serial (current value: {0}, leave blank to not modify): 的本地化字符串。
-        /// </summary>
-        internal static string I18N_InputHddSerialPrompt {
-            get {
-                return ResourceManager.GetString("I18N_InputHddSerialPrompt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Please enter mac_address (current value: {0}, leave blank to not modify): 的本地化字符串。
-        /// </summary>
-        internal static string I18N_InputMacAddressPrompt {
-            get {
-                return ResourceManager.GetString("I18N_InputMacAddressPrompt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Please enter motherboard (current value: {0}, leave blank to not modify): 的本地化字符串。
-        /// </summary>
-        internal static string I18N_InputMotherboardPrompt {
-            get {
-                return ResourceManager.GetString("I18N_InputMotherboardPrompt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Please enter savedata_file_path (leave blank to use default): 的本地化字符串。
-        /// </summary>
-        internal static string I18N_InputSaveDataFilePathPrompt {
-            get {
-                return ResourceManager.GetString("I18N_InputSaveDataFilePathPrompt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Please enter umamusume_file_path (current value: {0}, leave blank to not modify): 的本地化字符串。
-        /// </summary>
-        internal static string I18N_InputUmamusumeFilePathPrompt {
-            get {
-                return ResourceManager.GetString("I18N_InputUmamusumeFilePathPrompt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Please enter user_os (current value: {0}, leave blank to not modify): 的本地化字符串。
-        /// </summary>
-        internal static string I18N_InputUserOsPrompt {
-            get {
-                return ResourceManager.GetString("I18N_InputUserOsPrompt", resourceCulture);
             }
         }
         
@@ -601,7 +511,7 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 [yellow]Detecting if umamusume.exe is running[/] 的本地化字符串。
+        ///   查找类似 Detecting if umamusume.exe is running 的本地化字符串。
         /// </summary>
         internal static string I18N_Start_Checking {
             get {
@@ -628,7 +538,7 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 [grey]Log: [/] {0} 的本地化字符串。
+        ///   查找类似 Log: {0} 的本地化字符串。
         /// </summary>
         internal static string I18N_Start_Checking_Log {
             get {
@@ -637,7 +547,7 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 [bold blue]Acquiring DMM One-time Token[/] 的本地化字符串。
+        ///   查找类似 Acquiring DMM One-time Token 的本地化字符串。
         /// </summary>
         internal static string I18N_Start_GetToken {
             get {
@@ -655,7 +565,7 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 [bold green]Launched[/] 的本地化字符串。
+        ///   查找类似 Launched 的本地化字符串。
         /// </summary>
         internal static string I18N_Start_Started {
             get {
@@ -759,33 +669,6 @@ namespace DMMPlugin.i18n {
         internal static string I18N_Token_RetryAuth {
             get {
                 return ResourceManager.GetString("I18N_Token_RetryAuth", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Invalid/Expired 的本地化字符串。
-        /// </summary>
-        internal static string I18N_TokenStatus_Invalid {
-            get {
-                return ResourceManager.GetString("I18N_TokenStatus_Invalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Valid 的本地化字符串。
-        /// </summary>
-        internal static string I18N_TokenStatus_Valid {
-            get {
-                return ResourceManager.GetString("I18N_TokenStatus_Valid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Unknown .token key {0} 的本地化字符串。
-        /// </summary>
-        internal static string I18N_UnknownTokenKey {
-            get {
-                return ResourceManager.GetString("I18N_UnknownTokenKey", resourceCulture);
             }
         }
         

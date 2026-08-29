@@ -206,6 +206,9 @@ Do you want to enable this feature?</value>
   <data name="I18N_Auth_TokenNotFound" xml:space="preserve">
     <value>Failed to get login form token</value>
   </data>
+  <data name="I18N_Auth_PathNotFound" xml:space="preserve">
+    <value>Failed to get login form path</value>
+  </data>
   <data name="I18N_Auth_OAuthUrlNotFound" xml:space="preserve">
     <value>Failed to get OAuth redirect URL, please check if account and password are correct</value>
   </data>
@@ -302,48 +305,5 @@ Do you want to enable this feature?</value>
   </data>
   <data name="I18N_SaveData_LoadFailed" xml:space="preserve">
     <value>Failed to load save data: {0}</value>
-  </data>
-  <!-- Legacy/Unused -->
-  <data name="I18N_AddAccount" xml:space="preserve">
-    <value>Add account</value>
-  </data>
-  <data name="I18N_InputMacAddressPrompt" xml:space="preserve">
-    <value>Please enter mac_address (current value: {0}, leave blank to not modify):</value>
-  </data>
-  <data name="I18N_InputMotherboardPrompt" xml:space="preserve">
-    <value>Please enter motherboard (current value: {0}, leave blank to not modify):</value>
-  </data>
-  <data name="I18N_InputSaveDataFilePathPrompt" xml:space="preserve">
-    <value>Please enter savedata_file_path (leave blank to use default):</value>
-  </data>
-  <data name="I18N_InputUmamusumeFilePathPrompt" xml:space="preserve">
-    <value>Please enter umamusume_file_path (current value: {0}, leave blank to not modify):</value>
-  </data>
-  <data name="I18N_InputUserOsPrompt" xml:space="preserve">
-    <value>Please enter user_os (current value: {0}, leave blank to not modify):</value>
-  </data>
-  <data name="I18N_DeleteAccountInstruction" xml:space="preserve">
-    <value>Press Enter on the selected account to delete</value>
-  </data>
-  <data name="I18N_InputAccountCommentPrompt" xml:space="preserve">
-    <value>Please enter a note for this account:</value>
-  </data>
-  <data name="I18N_InputHddSerialPrompt" xml:space="preserve">
-    <value>Please enter hdd_serial (current value: {0}, leave blank to not modify):</value>
-  </data>
-  <data name="I18N_InputActauthPrompt" xml:space="preserve">
-    <value>Please enter actauth:</value>
-  </data>
-  <data name="I18N_UnknownTokenKey" xml:space="preserve">
-    <value>Unknown .token key {0}</value>
-  </data>
-  <data name="I18N_AppRootPathNull" xml:space="preserve">
-    <value>Incorrect game path?</value>
-  </data>
-  <data name="I18N_TokenStatus_Valid" xml:space="preserve">
-    <value>Valid</value>
-  </data>
-  <data name="I18N_TokenStatus_Invalid" xml:space="preserve">
-    <value>Invalid/Expired</value>
   </data>
 </root>

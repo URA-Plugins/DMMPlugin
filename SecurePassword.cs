@@ -7,7 +7,7 @@ using System.Text;
 namespace DMMPlugin;
 
 /// <summary>
-/// Windows DPAPI-NG 密码加密 - 绑定当前用户 SID
+/// Windows DPAPI 密码保护，绑定当前用户。
 /// </summary>
 public static class SecurePassword
 {
@@ -17,21 +17,23 @@ public static class SecurePassword
 
     public static string Encrypt(string? plain)
     {
-        if (string.IsNullOrEmpty(plain) || plain.StartsWith(Marker)) return plain ?? "";
+        if (string.IsNullOrEmpty(plain)) return string.Empty;
         var encrypted = ProtectedData.Protect(Encoding.UTF8.GetBytes(plain), Entropy, DataProtectionScope.CurrentUser);
         return Marker + Convert.ToBase64String(encrypted);
     }
 
     public static string Decrypt(string? encrypted)
     {
-        if (string.IsNullOrEmpty(encrypted)) return "";
-        if (!encrypted.StartsWith(Marker)) return encrypted; // 旧数据直接返回，下次保存时会加密
+        if (string.IsNullOrEmpty(encrypted)) return string.Empty;
+        if (!encrypted.StartsWith(Marker, StringComparison.Ordinal))
+            throw new InvalidDataException("DMM 密码格式无效：password 必须是当前版本写入的 DPAPI 密文。");
+
         try
         {
             var bytes = ProtectedData.Unprotect(Convert.FromBase64String(encrypted[Marker.Length..]), Entropy, DataProtectionScope.CurrentUser);
             return Encoding.UTF8.GetString(bytes);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is FormatException or CryptographicException)
         {
             throw new InvalidOperationException("DMM 密码解密失败。可能是 Windows 用户、机器或 DPAPI 状态变更，请重新配置账号密码。", ex);
         }

@@ -12,7 +12,7 @@ DMMPlugin is a Windows plugin for UmamusumeResponseAnalyzer that authenticates w
 
 ## Configuration and data
 
-Settings are stored at `PluginData/DMM插件/settings.yaml` relative to the host working directory. The file contains account and machine information plus DMM access tokens. Newly entered or changed passwords are protected with Windows DPAPI for the current user; passwords loaded from the legacy plaintext format remain plaintext until edited. The settings file and its tokens remain sensitive and must not be committed or shared.
+Settings are stored at `PluginData/DMM插件/settings.yaml` relative to the host working directory. The file uses the plugin's current case-sensitive YAML field names and contains account and machine information plus DMM access tokens. Passwords are protected with Windows DPAPI for the current user. Differently cased or unknown fields, plaintext passwords, and unreadable DPAPI values fail to load without rewriting the file. The settings file and its tokens remain sensitive and must not be committed or shared.
 
 The plugin requires Windows, a valid DMM account, network access to DMM services, and the path to an installed Umamusume executable.
 

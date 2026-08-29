@@ -14,10 +14,40 @@ internal static partial class DMM
     private static partial Regex TokenRegex();
     [GeneratedRegex("""<input type="hidden" name="path" value="([^"]+)"/>""")]
     private static partial Regex PathRegex();
-    [GeneratedRegex("""<input type="hidden" id="js-app-url" data-url = "([^"]+)"/>""")]
-    private static partial Regex OAuthTokenRegex();
     [GeneratedRegex("""<input type="hidden" id="ga-param-service-url" value="([^"]+)"/>""")]
     private static partial Regex ServiceUrlRegex();
+
+    internal static (string Token, string Path) ParseLoginForm(string html)
+    {
+        var token = TokenRegex().Match(html).Groups[1].Value;
+        if (string.IsNullOrEmpty(token))
+            throw new InvalidDataException(I18N_Auth_TokenNotFound);
+
+        var path = PathRegex().Match(html).Groups[1].Value;
+        if (string.IsNullOrEmpty(path))
+            throw new InvalidDataException(I18N_Auth_PathNotFound);
+
+        return (token, path);
+    }
+
+    internal static string ParseServiceUrl(string html)
+    {
+        var url = HttpUtility.HtmlDecode(ServiceUrlRegex().Match(html).Groups[1].Value);
+        return string.IsNullOrEmpty(url)
+            ? throw new InvalidDataException(I18N_Auth_OAuthUrlNotFound)
+            : url;
+    }
+
+    internal static string ParseOAuthCode(string redirectUrl)
+    {
+        if (!Uri.TryCreate(redirectUrl, UriKind.Absolute, out var uri))
+            throw new InvalidDataException(I18N_Auth_RedirectUrlNotFound);
+
+        var code = HttpUtility.ParseQueryString(uri.Query)["code"];
+        return string.IsNullOrEmpty(code)
+            ? throw new InvalidDataException(I18N_Auth_OAuthCodeNotFound)
+            : code;
+    }
 
     /// <summary>
     /// 获取 DMM 登录 URL
@@ -46,19 +76,7 @@ internal static partial class DMM
 
         // 2. 获取登录表单 token 与 path（path 已是 URL-encoded，原样回传）
         var loginPage = await client.GetStringAsync(loginUrl);
-        var token = TokenRegex().Match(loginPage).Groups[1].Value;
-        if (string.IsNullOrEmpty(token))
-        {
-            throw new Exception(I18N_Auth_TokenNotFound);
-        }
-
-        var path = PathRegex().Match(loginPage).Groups[1].Value;
-        if (string.IsNullOrEmpty(path))
-            path = Regex.Match(loginUrl, "[?&]path=([^&]+)").Groups[1].Value;
-        if (string.IsNullOrEmpty(path))
-        {
-            throw new Exception(I18N_Auth_TokenNotFound);
-        }
+        var (token, path) = ParseLoginForm(loginPage);
 
         // 3. 提交登录凭证
         using var oauthTokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://accounts.dmm.com/service/oauth/authenticate");
@@ -71,17 +89,7 @@ internal static partial class DMM
         var authContent = await authResponse.Content.ReadAsStringAsync();
 
         // 4. 获取最终跳转 URL（使用 ga-param-service-url）
-        var finalUrl = HttpUtility.HtmlDecode(ServiceUrlRegex().Match(authContent).Groups[1].Value);
-        if (string.IsNullOrEmpty(finalUrl))
-        {
-            // 尝试旧的正则作为备选
-            finalUrl = HttpUtility.HtmlDecode(OAuthTokenRegex().Match(authContent).Groups[1].Value);
-            if (!string.IsNullOrEmpty(finalUrl))
-            {
-                return finalUrl.Replace("dmmgameplayer://view/page?code=", string.Empty);
-            }
-            throw new Exception(I18N_Auth_OAuthUrlNotFound);
-        }
+        var finalUrl = ParseServiceUrl(authContent);
 
         // 5. 访问 final URL 获取 OAuth token
         using var oauthResponse = await client.GetAsync(finalUrl);
@@ -94,16 +102,7 @@ internal static partial class DMM
         }
 
         // 6. 从 URL 中提取 code
-        var oauth_code = HttpUtility.ParseQueryString(new Uri(redirectUrl).Query)["code"];
-        if (string.IsNullOrEmpty(oauth_code))
-            oauth_code = redirectUrl.Split("code=").LastOrDefault()?.Split('&').FirstOrDefault();
-
-        if (string.IsNullOrEmpty(oauth_code))
-        {
-            throw new Exception(I18N_Auth_OAuthCodeNotFound);
-        }
-
-        return oauth_code;
+        return ParseOAuthCode(redirectUrl);
     }
 
     /// <summary>

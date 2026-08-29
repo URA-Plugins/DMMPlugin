@@ -19,6 +19,8 @@ Do not add a separate host, Gallop, or plugin-abstractions reference to `DMMPlug
 
 - Keep the plugin on the host `IPlugin` lifecycle and route status, logs, and notifications through `DMMDisplay`/`TerminalUi`; do not create or own host workspaces or panels.
 - Use modern C# and the existing direct structure. Keep external DMM response validation at the protocol boundary and fail with a specific error instead of guessing missing values.
+- Authentication accepts the current DMM page contract: hidden `token`/`path`, `ga-param-service-url`, and an absolute redirect URL with a `code` query parameter.
 - Edit `.resx` localization sources together for base English, `en-US`, `zh-CN`, and `ja-JP`; do not hand-edit `DMM.Designer.cs`.
 - Treat `PluginData/DMM插件/settings.yaml`, DMM credentials, access tokens, machine identifiers, save data, and launch arguments as sensitive. Never commit or log their values.
+- Settings loading is strict: current case-sensitive YAML field names only, with `[E]` DPAPI ciphertext for non-empty passwords. Invalid files fail before runtime state changes and are not rewritten.
 - Password encryption is bound to the current Windows user through DPAPI. Do not change persisted YAML names or the encryption marker as incidental cleanup.

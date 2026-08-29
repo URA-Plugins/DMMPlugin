@@ -206,6 +206,9 @@
   <data name="I18N_Auth_TokenNotFound" xml:space="preserve">
     <value>ログインフォームのトークンを取得できません</value>
   </data>
+  <data name="I18N_Auth_PathNotFound" xml:space="preserve">
+    <value>ログインフォームの path を取得できません</value>
+  </data>
   <data name="I18N_Auth_OAuthUrlNotFound" xml:space="preserve">
     <value>OAuthリダイレクトURLを取得できません。アカウントとパスワードが正しいか確認してください</value>
   </data>
@@ -333,48 +336,5 @@
   </data>
   <data name="Tabs_DMM_UpdateGame" xml:space="preserve">
     <value>ゲームの更新/ダウンロード</value>
-  </data>
-  <!-- Legacy/Unused -->
-  <data name="I18N_AddAccount" xml:space="preserve">
-    <value>アカウントを追加</value>
-  </data>
-  <data name="I18N_InputMacAddressPrompt" xml:space="preserve">
-    <value>mac_addressを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
-  </data>
-  <data name="I18N_InputMotherboardPrompt" xml:space="preserve">
-    <value>motherboardを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
-  </data>
-  <data name="I18N_InputSaveDataFilePathPrompt" xml:space="preserve">
-    <value>savedata_file_pathを入力してください（わからない場合は空白のままにしてください）：</value>
-  </data>
-  <data name="I18N_InputUmamusumeFilePathPrompt" xml:space="preserve">
-    <value>umamusume_file_pathを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
-  </data>
-  <data name="I18N_InputUserOsPrompt" xml:space="preserve">
-    <value>user_osを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
-  </data>
-  <data name="I18N_DeleteAccountInstruction" xml:space="preserve">
-    <value>該当するアカウントを選択してEnterを押すと削除されます</value>
-  </data>
-  <data name="I18N_InputAccountCommentPrompt" xml:space="preserve">
-    <value>そのアカウントのメモを入力してください：</value>
-  </data>
-  <data name="I18N_InputHddSerialPrompt" xml:space="preserve">
-    <value>hdd_serialを入力してください（現在の値:{0}、変更しない場合は空白のままにしてください）：</value>
-  </data>
-  <data name="I18N_InputActauthPrompt" xml:space="preserve">
-    <value>actauthを入力してください：</value>
-  </data>
-  <data name="I18N_UnknownTokenKey" xml:space="preserve">
-    <value>未知の.tokenキー{0}</value>
-  </data>
-  <data name="I18N_AppRootPathNull" xml:space="preserve">
-    <value>ゲームパスが正しくありますか？</value>
-  </data>
-  <data name="I18N_TokenStatus_Valid" xml:space="preserve">
-    <value>有効</value>
-  </data>
-  <data name="I18N_TokenStatus_Invalid" xml:space="preserve">
-    <value>無効/期限切れ</value>
   </data>
 </root>
