@@ -6,14 +6,15 @@
 
 ## Build safety and tests
 
-The parent `Directory.Build.targets` supplies the host project reference and packaging targets. For ordinary development, always disable manifest generation, packaging, and local deployment, and pass the host project explicitly:
+The repository-owned build files import the pinned Host build contract. Initialize the source dependency before building; Release builds generate a package without deploying it locally:
 
 ```powershell
-dotnet build .\DMMPlugin.slnx -m:1 -p:GenerateUraPluginManifestOnBuild=false -p:PackageUraPluginOnBuild=false -p:DeployUraPluginToLocalAppDataOnBuild=false -p:UraHostProjectPath="<ura-host-project>"
-dotnet run --project .\tests\DMMPlugin.Tests\DMMPlugin.Tests.csproj -m:1 -p:GenerateUraPluginManifestOnBuild=false -p:PackageUraPluginOnBuild=false -p:DeployUraPluginToLocalAppDataOnBuild=false -p:UraHostProjectPath="<ura-host-project>"
+git -c core.longpaths=true submodule update --init --recursive
+dotnet build .\DMMPlugin.csproj -c Release -m:1 -p:RuntimeIdentifier=win-x64 -p:SelfContained=false -p:PlatformTarget=AnyCPU -p:DeployUraPluginToLocalAppDataOnBuild=false
+dotnet run --project .\tests\DMMPlugin.Tests\DMMPlugin.Tests.csproj -c Release -p:GenerateUraPluginManifestOnBuild=false -p:PackageUraPluginOnBuild=false -p:DeployUraPluginToLocalAppDataOnBuild=false
 ```
 
-Do not add a separate host, Gallop, or plugin-abstractions reference to `DMMPlugin.csproj`; the shared targets own that reference.
+Do not add a separate Host, Gallop, or plugin-abstractions reference to `DMMPlugin.csproj`; the repository build targets own that reference.
 
 ## Code and integration constraints
 

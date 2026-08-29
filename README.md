@@ -18,10 +18,10 @@ The plugin requires Windows, a valid DMM account, network access to DMM services
 
 ## Build and smoke test
 
-Replace `<ura-host-project>` with the path to the host `.csproj`:
+The repository pins the Host source with a Git submodule. From the repository root after cloning:
 
 ```powershell
-dotnet restore .\DMMPlugin.slnx -p:GenerateUraPluginManifestOnBuild=false -p:PackageUraPluginOnBuild=false -p:DeployUraPluginToLocalAppDataOnBuild=false -p:UraHostProjectPath="<ura-host-project>"
-dotnet build .\DMMPlugin.slnx -m:1 --no-restore -p:GenerateUraPluginManifestOnBuild=false -p:PackageUraPluginOnBuild=false -p:DeployUraPluginToLocalAppDataOnBuild=false -p:UraHostProjectPath="<ura-host-project>"
-dotnet run --project .\tests\DMMPlugin.Tests\DMMPlugin.Tests.csproj -m:1 --no-restore -p:GenerateUraPluginManifestOnBuild=false -p:PackageUraPluginOnBuild=false -p:DeployUraPluginToLocalAppDataOnBuild=false -p:UraHostProjectPath="<ura-host-project>"
+git -c core.longpaths=true submodule update --init --recursive
+dotnet build .\DMMPlugin.csproj -c Release -m:1 -p:RuntimeIdentifier=win-x64 -p:SelfContained=false -p:PlatformTarget=AnyCPU -p:DeployUraPluginToLocalAppDataOnBuild=false
+dotnet run --project .\tests\DMMPlugin.Tests\DMMPlugin.Tests.csproj -c Release -p:GenerateUraPluginManifestOnBuild=false -p:PackageUraPluginOnBuild=false -p:DeployUraPluginToLocalAppDataOnBuild=false
 ```
