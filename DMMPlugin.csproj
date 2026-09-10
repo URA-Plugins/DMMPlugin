@@ -5,7 +5,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>2026.3.25</Version>
+		<Version>2026.9.10</Version>
 		<!-- 自动把本插件的 NuGet 依赖闭包拷到输出。 -->
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
