@@ -6,15 +6,15 @@
 
 ## Build safety and tests
 
-The repository-owned build files import the pinned Host build contract. Initialize the source dependency before building; Release builds generate a package without deploying it locally:
+The `UmamusumeResponseAnalyzer` package reference uses `Version="*"` for the latest stable Host build contract. Release builds generate a package with local deployment disabled:
 
 ```powershell
-git -c core.longpaths=true submodule update --init --recursive
+dotnet restore .\DMMPlugin.csproj --force --no-http-cache
 dotnet build .\DMMPlugin.csproj -c Release -m:1 -p:RuntimeIdentifier=win-x64 -p:SelfContained=false -p:PlatformTarget=AnyCPU -p:DeployUraPluginToLocalAppDataOnBuild=false
-dotnet run --project .\tests\DMMPlugin.Tests\DMMPlugin.Tests.csproj -c Release -p:GenerateUraPluginManifestOnBuild=false -p:PackageUraPluginOnBuild=false -p:DeployUraPluginToLocalAppDataOnBuild=false
+act workflow_dispatch --artifact-server-path "$env:TEMP/ura-act-artifacts"
 ```
 
-Do not add a separate Host, Gallop, or plugin-abstractions reference to `DMMPlugin.csproj`; the repository build targets own that reference.
+Do not add a Host project reference, Gallop package, or plugin-abstractions package to `DMMPlugin.csproj`; the Host NuGet package supplies the compile-time API.
 
 ## Code and integration constraints
 
