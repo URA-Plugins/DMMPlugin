@@ -14,6 +14,8 @@ internal static partial class DMM
     private static partial Regex TokenRegex();
     [GeneratedRegex("""<input type="hidden" name="path" value="([^"]+)"/>""")]
     private static partial Regex PathRegex();
+    [GeneratedRegex("""<input type="hidden" id="js-app-url" data-url = "([^"]+)"/>""")]
+    private static partial Regex OAuthTokenRegex();
     [GeneratedRegex("""<input type="hidden" id="ga-param-service-url" value="([^"]+)"/>""")]
     private static partial Regex ServiceUrlRegex();
 
@@ -33,6 +35,9 @@ internal static partial class DMM
     internal static string ParseServiceUrl(string html)
     {
         var url = HttpUtility.HtmlDecode(ServiceUrlRegex().Match(html).Groups[1].Value);
+        if (string.IsNullOrEmpty(url))
+            url = HttpUtility.HtmlDecode(OAuthTokenRegex().Match(html).Groups[1].Value);
+
         return string.IsNullOrEmpty(url)
             ? throw new InvalidDataException(I18N_Auth_OAuthUrlNotFound)
             : url;
@@ -88,8 +93,10 @@ internal static partial class DMM
         using var authResponse = await client.SendAsync(oauthTokenRequest);
         var authContent = await authResponse.Content.ReadAsStringAsync();
 
-        // 4. 获取最终跳转 URL（使用 ga-param-service-url）
+        // 4. 获取最终跳转 URL
         var finalUrl = ParseServiceUrl(authContent);
+        if (finalUrl.StartsWith("dmmgameplayer://view/page?", StringComparison.Ordinal))
+            return ParseOAuthCode(finalUrl);
 
         // 5. 访问 final URL 获取 OAuth token
         using var oauthResponse = await client.GetAsync(finalUrl);

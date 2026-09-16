@@ -99,8 +99,10 @@ static void AuthenticationParserAcceptsOnlyCurrentContract()
     if (serviceUrl != "https://example.test/oauth?state=a&value=b")
         throw new InvalidOperationException("Current service URL was not parsed.");
 
-    Throws<InvalidDataException>(() => DMM.ParseServiceUrl(
-        """<input type="hidden" id="js-app-url" data-url = "dmmgameplayer://view/page?code=removed"/>"""));
+    var appUrl = DMM.ParseServiceUrl(
+        """<input type="hidden" id="js-app-url" data-url = "dmmgameplayer://view/page?code=restored"/>""");
+    if (DMM.ParseOAuthCode(appUrl) != "restored")
+        throw new InvalidOperationException("DMM Game Player OAuth URL was not parsed.");
 
     if (DMM.ParseOAuthCode("https://example.test/callback?code=current&state=state") != "current")
         throw new InvalidOperationException("Current OAuth code was not parsed.");
