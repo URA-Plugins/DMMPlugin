@@ -13,7 +13,6 @@
 		<PluginInternalName>DMMPlugin</PluginInternalName>
 		<PluginDisplayName>DMM插件</PluginDisplayName>
 		<PluginAuthor>Lipi</PluginAuthor>
-		<PluginTargets>Cygames</PluginTargets>
 	</PropertyGroup>
 
 	<ItemGroup>

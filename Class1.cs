@@ -9,6 +9,7 @@ public class DMMPlugin : IPlugin
 {
     // Startup and configuration can both refresh tokens and save the same settings file.
     readonly SemaphoreSlim operationGate = new(1, 1);
+    IApplication application = null!;
 
     public string DataDirectory => Path.Combine("PluginData", "DMM插件");
     public string SettingsFilePath => Path.Combine(DataDirectory, "settings.yaml");
@@ -25,18 +26,15 @@ public class DMMPlugin : IPlugin
 
     public void Initialize(IPluginContext context)
     {
+        application = context.Application;
         DMMDisplay.SetStatusText("等待 URA 启动。");
         Directory.CreateDirectory(DataDirectory);
         LoadSettings();
         SyncToStatic();
         DMM.PluginInstance = this;
-        context.Events.OnStarted(
-            cancellationToken => RunOnUraStartedAsync(context.Application, cancellationToken));
     }
 
-    async ValueTask RunOnUraStartedAsync(
-        IApplication application,
-        CancellationToken cancellationToken)
+    public async ValueTask StartAsync(CancellationToken cancellationToken = default)
     {
         try
         {
@@ -126,10 +124,11 @@ public class DMMPlugin : IPlugin
         }
     }
 
-    public void Dispose()
+    public ValueTask DisposeAsync()
     {
         DMM.PluginInstance = null;
         operationGate.Dispose();
+        return ValueTask.CompletedTask;
     }
 
     internal void LoadSettings()
