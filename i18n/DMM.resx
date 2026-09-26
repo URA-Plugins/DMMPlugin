@@ -87,22 +87,10 @@ Do you want to enable this feature?</value>
     <value>Modification not supported, please edit config.yaml directly. Press Enter to return.</value>
   </data>
   <data name="Tabs_DMM_EditMachineInformation" xml:space="preserve">
-    <value>Edit Machine Information</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputMA" xml:space="preserve">
-    <value>Input mac_address</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputHS" xml:space="preserve">
-    <value>Input hdd_serial</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputMB" xml:space="preserve">
-    <value>Input motherboard</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputOS" xml:space="preserve">
-    <value>Input user_os</value>
+    <value>Game executable path</value>
   </data>
   <data name="Tabs_DMM_EditMachineInformation_InputUmamusumePath" xml:space="preserve">
-    <value>Input Umamusume Path</value>
+    <value>Umamusume executable</value>
   </data>
   <data name="Tabs_DMM_EditAccounts" xml:space="preserve">
     <value>Edit Accounts</value>
@@ -336,5 +324,26 @@ Do you want to enable this feature?</value>
   </data>
   <data name="Tabs_DMM_UpdateGame" xml:space="preserve">
     <value>Update/Download Game</value>
+  </data>
+  <data name="I18N_Path_AutoDiscover" xml:space="preserve">
+    <value>Leave empty to discover the installed game from DMM Game Player.</value>
+  </data>
+  <data name="I18N_Device_WindowsRequired" xml:space="preserve">
+    <value>Automatic DMM device information requires Windows.</value>
+  </data>
+  <data name="I18N_Device_MachineGuidFailed" xml:space="preserve">
+    <value>Cannot read a non-empty MachineGuid from HKLM\SOFTWARE\Microsoft\Cryptography (64-bit view). Check registry access.</value>
+  </data>
+  <data name="I18N_Device_NoMacAddress" xml:space="preserve">
+    <value>No network adapter has a non-empty, non-zero MAC address. Check the network adapters.</value>
+  </data>
+  <data name="I18N_Path_ExecutableMissing" xml:space="preserve">
+    <value>The game executable path is not absolute or the file does not exist: {0}. Specify a valid executable path in DMMPlugin settings.</value>
+  </data>
+  <data name="I18N_Path_DiscoveryFailed" xml:space="preserve">
+    <value>{0} Specify the game executable path in DMMPlugin settings.</value>
+  </data>
+  <data name="I18N_Path_NotFound" xml:space="preserve">
+    <value>No installed Umamusume game was found. Specify the game executable path in DMMPlugin settings.</value>
   </data>
 </root>

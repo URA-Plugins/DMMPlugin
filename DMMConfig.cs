@@ -26,20 +26,13 @@ public static class DMMConfig
 
     public class DMMMachineInformation
     {
-        public string mac_address { get; set; } = string.Empty;
-        public string hdd_serial { get; set; } = string.Empty;
-        public string motherboard { get; set; } = string.Empty;
-        public string user_os { get; set; } = string.Empty;
-        public string umamusume_file_path { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Umamusume", "umamusume.exe");
-
+        public string umamusume_file_path { get; set; } = string.Empty;
     }
 
     public class DMMAccountInformation
     {
-        internal static string SaveDataDirectory =>
-            Path.Combine(Path.GetDirectoryName(MachineInformation.umamusume_file_path) ?? throw new FileNotFoundException(), "umamusume_Data", "Persistent", "d");
-        [YamlIgnore]
-        internal static string DefaultSaveDataPath => Path.Combine(SaveDataDirectory, "SaveData.db");
+        internal static string DefaultSaveDataPath(string gamePath)
+            => Path.Combine(Path.GetDirectoryName(gamePath)!, "umamusume_Data", "Persistent", "d", "SaveData.db");
 
         [YamlMember(Alias = "name", ApplyNamingConventions = false)]
         public string Name { get; set; } = string.Empty;
@@ -60,18 +53,20 @@ public static class DMMConfig
         [YamlMember(Alias = "access-token-expires-at", ApplyNamingConventions = false)]
         public long? access_token_expires_at { get; set; }
 
-        internal void HandleFirstTimeSaveDataAssociation(bool isCurrentAccount)
+        internal void HandleFirstTimeSaveDataAssociation(bool isCurrentAccount, string gamePath)
         {
-            if (!File.Exists(DefaultSaveDataPath))
+            var defaultSaveDataPath = DefaultSaveDataPath(gamePath);
+            var saveDataPath = GetSaveDataPath(gamePath);
+            if (!File.Exists(defaultSaveDataPath))
                 return;
 
             if (isCurrentAccount)
             {
-                if (!File.Exists(SaveDataPath))
+                if (!File.Exists(saveDataPath))
                 {
                     try
                     {
-                        File.Copy(DefaultSaveDataPath, SaveDataPath, true);
+                        File.Copy(defaultSaveDataPath, saveDataPath, true);
                         DMMDisplay.Log(
                             string.Format(I18N_SaveData_Associated, Name),
                             UiSeverity.Success);
@@ -88,8 +83,8 @@ public static class DMMConfig
             {
                 try
                 {
-                    var oldPath = DefaultSaveDataPath + ".old";
-                    File.Move(DefaultSaveDataPath, oldPath, true);
+                    var oldPath = defaultSaveDataPath + ".old";
+                    File.Move(defaultSaveDataPath, oldPath, true);
                     DMMDisplay.Log(
                         string.Format(I18N_SaveData_RenamedToOld, oldPath),
                         UiSeverity.Success);
@@ -113,7 +108,7 @@ public static class DMMConfig
             return DateTimeOffset.UtcNow.ToUnixTimeSeconds() < access_token_expires_at.Value;
         }
 
-        [YamlIgnore]
-        public string SaveDataPath => Path.Combine(SaveDataDirectory, $"SaveData.db.{Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(Account)))[..8]}");
+        internal string GetSaveDataPath(string gamePath)
+            => $"{DefaultSaveDataPath(gamePath)}.{Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(Account)))[..8]}";
     }
 }

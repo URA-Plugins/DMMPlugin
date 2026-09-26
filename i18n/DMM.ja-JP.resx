@@ -87,22 +87,10 @@
     <value>変更はサポートされていません。必要な場合はconfig.yamlを直接編集してください。Enterを押して戻ります。</value>
   </data>
   <data name="Tabs_DMM_EditMachineInformation" xml:space="preserve">
-    <value>マシン情報を編集</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputMA" xml:space="preserve">
-    <value>mac_addressを入力</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputHS" xml:space="preserve">
-    <value>hdd_serialを入力</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputMB" xml:space="preserve">
-    <value>motherboardを入力</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputOS" xml:space="preserve">
-    <value>user_osを入力</value>
+    <value>ゲーム実行ファイルのパス</value>
   </data>
   <data name="Tabs_DMM_EditMachineInformation_InputUmamusumePath" xml:space="preserve">
-    <value>ウマ娘実行ファイルパスを入力</value>
+    <value>ウマ娘の実行ファイル</value>
   </data>
   <data name="Tabs_DMM_EditAccounts" xml:space="preserve">
     <value>アカウントを編集</value>
@@ -336,5 +324,26 @@
   </data>
   <data name="Tabs_DMM_UpdateGame" xml:space="preserve">
     <value>ゲームの更新/ダウンロード</value>
+  </data>
+  <data name="I18N_Path_AutoDiscover" xml:space="preserve">
+    <value>空欄の場合、DMM Game Player のインストール情報から自動検出します。</value>
+  </data>
+  <data name="I18N_Device_WindowsRequired" xml:space="preserve">
+    <value>DMM デバイス情報の自動取得には Windows が必要です。</value>
+  </data>
+  <data name="I18N_Device_MachineGuidFailed" xml:space="preserve">
+    <value>HKLM\SOFTWARE\Microsoft\Cryptography（64 ビット）から空でない MachineGuid を取得できません。レジストリのアクセス権を確認してください。</value>
+  </data>
+  <data name="I18N_Device_NoMacAddress" xml:space="preserve">
+    <value>有効な MAC アドレスを持つネットワークアダプターがありません。ネットワークアダプターを確認してください。</value>
+  </data>
+  <data name="I18N_Path_ExecutableMissing" xml:space="preserve">
+    <value>ゲーム実行ファイルのパスが絶対パスでないか、ファイルが存在しません：{0}。DMMPlugin の設定で有効な実行ファイルのパスを指定してください。</value>
+  </data>
+  <data name="I18N_Path_DiscoveryFailed" xml:space="preserve">
+    <value>{0} DMMPlugin の設定でゲーム実行ファイルのパスを指定してください。</value>
+  </data>
+  <data name="I18N_Path_NotFound" xml:space="preserve">
+    <value>インストール済みのウマ娘が見つかりません。DMMPlugin の設定でゲーム実行ファイルのパスを指定してください。</value>
   </data>
 </root>

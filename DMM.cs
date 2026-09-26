@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using static DMMPlugin.DMMConfig;
 
 namespace DMMPlugin;
@@ -12,6 +13,21 @@ internal static partial class DMM
     private const string ApiBase = "https://apidgp-gameplayer.games.dmm.com/v5";
 
     internal static DMMPlugin? PluginInstance { get; set; }
+
+    internal static JObject CreateGameRequest()
+    {
+        var device = PluginInstance!.DeviceInformation.Value;
+        return new JObject
+        {
+            ["product_id"] = "umamusume",
+            ["game_type"] = "GCL",
+            ["game_os"] = "win",
+            ["mac_address"] = device.MacAddress,
+            ["hdd_serial"] = device.HddSerial,
+            ["motherboard"] = device.Motherboard,
+            ["user_os"] = "win",
+        };
+    }
 
     public static bool IgnoreExistProcess = false;
 

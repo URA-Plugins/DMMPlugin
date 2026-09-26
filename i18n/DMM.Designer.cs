@@ -221,7 +221,7 @@ namespace DMMPlugin.i18n {
                 return ResourceManager.GetString("I18N_Auth_PathNotFound", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   查找类似 Failed to get OAuth redirect URL 的本地化字符串。
         /// </summary>
@@ -264,6 +264,33 @@ namespace DMMPlugin.i18n {
         internal static string I18N_Cancel {
             get {
                 return ResourceManager.GetString("I18N_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Cannot read a non-empty MachineGuid from HKLM\SOFTWARE\Microsoft\Cryptography (64-bit view). Check registry access. 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Device_MachineGuidFailed {
+            get {
+                return ResourceManager.GetString("I18N_Device_MachineGuidFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 No network adapter has a non-empty, non-zero MAC address. Check the network adapters. 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Device_NoMacAddress {
+            get {
+                return ResourceManager.GetString("I18N_Device_NoMacAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Automatic DMM device information requires Windows. 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Device_WindowsRequired {
+            get {
+                return ResourceManager.GetString("I18N_Device_WindowsRequired", resourceCulture);
             }
         }
         
@@ -381,6 +408,42 @@ namespace DMMPlugin.i18n {
         internal static string I18N_MultipleAccountsFound {
             get {
                 return ResourceManager.GetString("I18N_MultipleAccountsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Leave empty to discover the installed game from DMM Game Player. 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Path_AutoDiscover {
+            get {
+                return ResourceManager.GetString("I18N_Path_AutoDiscover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 {0} Specify the game executable path in DMMPlugin settings. 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Path_DiscoveryFailed {
+            get {
+                return ResourceManager.GetString("I18N_Path_DiscoveryFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The game executable path is not absolute or the file does not exist: {0}. Specify a valid executable path in DMMPlugin settings. 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Path_ExecutableMissing {
+            get {
+                return ResourceManager.GetString("I18N_Path_ExecutableMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 No installed Umamusume game was found. Specify the game executable path in DMMPlugin settings. 的本地化字符串。
+        /// </summary>
+        internal static string I18N_Path_NotFound {
+            get {
+                return ResourceManager.GetString("I18N_Path_NotFound", resourceCulture);
             }
         }
         
@@ -765,7 +828,7 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 Edit Machine Information 的本地化字符串。
+        ///   查找类似 Game executable path 的本地化字符串。
         /// </summary>
         internal static string Tabs_DMM_EditMachineInformation {
             get {
@@ -774,43 +837,7 @@ namespace DMMPlugin.i18n {
         }
         
         /// <summary>
-        ///   查找类似 Input hdd_serial 的本地化字符串。
-        /// </summary>
-        internal static string Tabs_DMM_EditMachineInformation_InputHS {
-            get {
-                return ResourceManager.GetString("Tabs_DMM_EditMachineInformation_InputHS", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Input mac_address 的本地化字符串。
-        /// </summary>
-        internal static string Tabs_DMM_EditMachineInformation_InputMA {
-            get {
-                return ResourceManager.GetString("Tabs_DMM_EditMachineInformation_InputMA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Input motherboard 的本地化字符串。
-        /// </summary>
-        internal static string Tabs_DMM_EditMachineInformation_InputMB {
-            get {
-                return ResourceManager.GetString("Tabs_DMM_EditMachineInformation_InputMB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Input user_os 的本地化字符串。
-        /// </summary>
-        internal static string Tabs_DMM_EditMachineInformation_InputOS {
-            get {
-                return ResourceManager.GetString("Tabs_DMM_EditMachineInformation_InputOS", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Input Umamusume Path 的本地化字符串。
+        ///   查找类似 Umamusume executable 的本地化字符串。
         /// </summary>
         internal static string Tabs_DMM_EditMachineInformation_InputUmamusumePath {
             get {

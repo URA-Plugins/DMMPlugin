@@ -10,7 +10,8 @@ internal static class DMMConfigDialog
 {
     internal sealed record SaveDataAssociation(
         DMMAccountInformation Account,
-        bool IsCurrentAccount);
+        bool IsCurrentAccount,
+        string GamePath);
 
     internal sealed record EditResult(
         DMMPluginSettings Settings,
@@ -87,7 +88,7 @@ internal static class DMMConfigDialog
         DMMPluginSettings draft,
         CancellationToken cancellationToken)
     {
-        var associations = new Dictionary<DMMAccountInformation, bool>(
+        var associations = new Dictionary<DMMAccountInformation, (bool IsCurrentAccount, string GamePath)>(
             ReferenceEqualityComparer.Instance);
         while (true)
         {
@@ -109,7 +110,7 @@ internal static class DMMConfigDialog
                         null,
                         associations
                             .Where(x => draft.Accounts.Contains(x.Key))
-                            .Select(x => new SaveDataAssociation(x.Key, x.Value))
+                            .Select(x => new SaveDataAssociation(x.Key, x.Value.IsCurrentAccount, x.Value.GamePath))
                             .ToArray());
                 case MainAction.SaveAndUpdate:
                     return new(
@@ -117,7 +118,7 @@ internal static class DMMConfigDialog
                         SelectUpdateAccount(application, draft.Accounts, cancellationToken),
                         associations
                             .Where(x => draft.Accounts.Contains(x.Key))
-                            .Select(x => new SaveDataAssociation(x.Key, x.Value))
+                            .Select(x => new SaveDataAssociation(x.Key, x.Value.IsCurrentAccount, x.Value.GamePath))
                             .ToArray());
                 case MainAction.Cancel:
                     throw new OperationCanceledException("DMMPlugin 配置已取消。");
@@ -233,20 +234,16 @@ internal static class DMMConfigDialog
         {
             Title = Tabs_DMM_EditMachineInformation,
             Width = 96,
-            Height = 18,
+            Height = 9,
         };
-        var fields = new[]
+        var path = AddField(dialog, 1, Tabs_DMM_EditMachineInformation_InputUmamusumePath, machine.umamusume_file_path);
+        dialog.Add(new Label
         {
-            AddField(dialog, 1, Tabs_DMM_EditMachineInformation_InputMA, machine.mac_address),
-            AddField(dialog, 3, Tabs_DMM_EditMachineInformation_InputHS, machine.hdd_serial),
-            AddField(dialog, 5, Tabs_DMM_EditMachineInformation_InputMB, machine.motherboard),
-            AddField(dialog, 7, Tabs_DMM_EditMachineInformation_InputOS, machine.user_os),
-            AddField(
-                dialog,
-                9,
-                Tabs_DMM_EditMachineInformation_InputUmamusumePath,
-                machine.umamusume_file_path),
-        };
+            X = 1,
+            Y = 3,
+            Width = Dim.Fill(1),
+            Text = I18N_Path_AutoDiscover,
+        });
 
         var accepted = false;
         var save = new Button { Text = "保存", IsDefault = true };
@@ -264,16 +261,12 @@ internal static class DMMConfigDialog
         };
         dialog.AddButton(cancel);
         dialog.AddButton(save);
-        fields[0].SetFocus();
+        path.SetFocus();
         RunDialog(application, dialog, cancellationToken);
         if (!accepted)
             return;
 
-        machine.mac_address = fields[0].Text;
-        machine.hdd_serial = fields[1].Text;
-        machine.motherboard = fields[2].Text;
-        machine.user_os = fields[3].Text;
-        machine.umamusume_file_path = fields[4].Text;
+        machine.umamusume_file_path = path.Text;
     }
 
     static TextField AddField(
@@ -305,7 +298,7 @@ internal static class DMMConfigDialog
     static void EditAccounts(
         IApplication application,
         DMMPluginSettings draft,
-        Dictionary<DMMAccountInformation, bool> associations,
+        Dictionary<DMMAccountInformation, (bool IsCurrentAccount, string GamePath)> associations,
         CancellationToken cancellationToken)
     {
         while (true)
@@ -321,20 +314,21 @@ internal static class DMMConfigDialog
                     continue;
 
                 draft.Accounts.Add(edit.Account);
-                var defaultSaveDataPath = DefaultSaveDataPath(draft.MachineInformation);
+                var gamePath = FindInstalledGameForAssociation(draft.MachineInformation);
+                var defaultSaveDataPath = gamePath is null ? null : DMMAccountInformation.DefaultSaveDataPath(gamePath);
                 if (File.Exists(defaultSaveDataPath))
                 {
                     var isCurrentAccount = SelectSaveDataOwner(
                         application,
                         edit.Account,
-                        defaultSaveDataPath,
+                        defaultSaveDataPath!,
                         cancellationToken);
                     if (isCurrentAccount is null)
                     {
                         draft.Accounts.Remove(edit.Account);
                         continue;
                     }
-                    associations[edit.Account] = isCurrentAccount.Value;
+                    associations[edit.Account] = (isCurrentAccount.Value, gamePath!);
                 }
                 continue;
             }
@@ -604,17 +598,17 @@ internal static class DMMConfigDialog
             access_token_expires_at = account.access_token_expires_at,
         };
 
-    static string DefaultSaveDataPath(DMMMachineInformation machine)
+    internal static string? FindInstalledGameForAssociation(DMMMachineInformation machine)
     {
-        var gameDirectory = Path.GetDirectoryName(machine.umamusume_file_path);
-        return gameDirectory is null
-            ? string.Empty
-            : Path.Combine(
-                gameDirectory,
-                "umamusume_Data",
-                "Persistent",
-                "d",
-                "SaveData.db");
+        try
+        {
+            return DMM.ResolveGamePath(machine);
+        }
+        catch (InvalidDataException)
+        {
+            // Account configuration is also available before the game is installed.
+            return null;
+        }
     }
 
     static void RunDialog(

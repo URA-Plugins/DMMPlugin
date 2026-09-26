@@ -13,11 +13,11 @@ internal static partial class DMM
     /// <summary>
     /// 获取游戏启动参数。若检测到版本更新，通过 pendingDownload 返回下载信息。
     /// </summary>
-    public static async Task<(string executeArgs, string error, (string fileListUrl, string sign, string latestVersion, string installDir)? pendingDownload)> GetExecuteArgsAsync(DMMAccountInformation account)
+    public static async Task<(string executeArgs, string error, (string fileListUrl, string sign, string latestVersion, string installDir)? pendingDownload)> GetExecuteArgsAsync(DMMAccountInformation account, string gamePath)
     {
-        var jsonContent = $$"""
-            {"product_id":"umamusume","game_type":"GCL","game_os":"win","launch_type":"LIB","mac_address":"{{MachineInformation.mac_address}}","hdd_serial":"{{MachineInformation.hdd_serial}}","motherboard":"{{MachineInformation.motherboard}}","user_os":"{{MachineInformation.user_os}}"}
-            """.Trim();
+        var request = CreateGameRequest();
+        request["launch_type"] = "LIB";
+        var jsonContent = request.ToString(Newtonsoft.Json.Formatting.None);
 
         var launchUrl = $"{ApiBase}/r2/launch/cl";
         var json = await PostWithAuthAsync(account, launchUrl, jsonContent);
@@ -44,11 +44,11 @@ internal static partial class DMM
             return (null!, string.Format(I18N_Launch_Failed, json["error"]?.ToString() ?? $"Error code {resultCode}"), null);
 
         (string fileListUrl, string sign, string latestVersion, string installDir)? pendingDownload = null;
-        var localVersion = GetGameVersion();
+        var localVersion = GetGameVersion(gamePath);
         if (!string.IsNullOrEmpty(localVersion) && json["data"]!["latest_version"]?.ToString() != localVersion)
         {
             var (fileListUrl, sign, latestVersion) = await GetFileListAsync(account);
-            pendingDownload = (fileListUrl, sign, latestVersion, Path.GetDirectoryName(MachineInformation.umamusume_file_path)!);
+            pendingDownload = (fileListUrl, sign, latestVersion, Path.GetDirectoryName(gamePath)!);
         }
 
         var executeArgs = json["data"]!["execute_args"]?.ToString();
@@ -60,6 +60,7 @@ internal static partial class DMM
     /// </summary>
     public static async Task RunUmamusume(DMMAccountInformation account)
     {
+        var gamePath = ResolveGamePath(MachineInformation);
         var executeArgs = string.Empty;
         (string fileListUrl, string sign, string latestVersion, string installDir)? pendingDownload = null;
 
@@ -77,7 +78,7 @@ internal static partial class DMM
             }
 
             DMMDisplay.SetStatusText(I18N_Start_GetToken);
-            SaveLastAccountSaveDataIfSwitched(account);
+            SaveLastAccountSaveDataIfSwitched(account, gamePath);
 
             if (!await EnsureAccessToken(account))
             {
@@ -89,7 +90,7 @@ internal static partial class DMM
                 return;
             }
 
-            var (args, error, update) = await GetExecuteArgsAsync(account);
+            var (args, error, update) = await GetExecuteArgsAsync(account, gamePath);
 
             if (!string.IsNullOrEmpty(error))
             {
@@ -129,7 +130,7 @@ internal static partial class DMM
             await DownloadGameAsync(account, installDir, fileListUrl, sign, latestVersion);
         }
 
-        if (!LoadAccountSaveDataIfSwitched(account))
+        if (!LoadAccountSaveDataIfSwitched(account, gamePath))
         {
             DMMDisplay.Log(
                 string.Format(I18N_Start_Checking_Log, I18N_Launch_SaveDataFailed),
@@ -139,7 +140,7 @@ internal static partial class DMM
             return;
         }
 
-        Launch(executeArgs);
+        Launch(gamePath, executeArgs);
         LastUsedAccountName = account.Account;
         SavePluginConfig();
     }
@@ -147,18 +148,19 @@ internal static partial class DMM
     /// <summary>
     /// 如果切换了账号，保存上一个账号的存档到其专属路径
     /// </summary>
-    private static void SaveLastAccountSaveDataIfSwitched(DMMAccountInformation currentAccount)
+    private static void SaveLastAccountSaveDataIfSwitched(DMMAccountInformation currentAccount, string gamePath)
     {
         if (string.IsNullOrEmpty(LastUsedAccountName) || LastUsedAccountName == currentAccount.Account)
             return;
 
         var lastAccount = Accounts.FirstOrDefault(x => x.Account == LastUsedAccountName);
-        if (lastAccount is null || !File.Exists(DMMAccountInformation.DefaultSaveDataPath))
+        var defaultSaveDataPath = DMMAccountInformation.DefaultSaveDataPath(gamePath);
+        if (lastAccount is null || !File.Exists(defaultSaveDataPath))
             return;
 
         try
         {
-            File.Copy(DMMAccountInformation.DefaultSaveDataPath, lastAccount.SaveDataPath, true);
+            File.Copy(defaultSaveDataPath, lastAccount.GetSaveDataPath(gamePath), true);
             DMMDisplay.Log(string.Format(
                 I18N_Start_Checking_Log,
                 string.Format(I18N_SaveData_SavedForAccount, lastAccount.Name)));
@@ -176,7 +178,7 @@ internal static partial class DMM
     /// <summary>
     /// 如果切换了账号，加载新账号的存档到默认路径
     /// </summary>
-    private static bool LoadAccountSaveDataIfSwitched(DMMAccountInformation account)
+    private static bool LoadAccountSaveDataIfSwitched(DMMAccountInformation account, string gamePath)
     {
         if (LastUsedAccountName == account.Account)
         {
@@ -186,23 +188,25 @@ internal static partial class DMM
 
         try
         {
-            if (!File.Exists(account.SaveDataPath))
+            var saveDataPath = account.GetSaveDataPath(gamePath);
+            var defaultSaveDataPath = DMMAccountInformation.DefaultSaveDataPath(gamePath);
+            if (!File.Exists(saveDataPath))
             {
                 DMMDisplay.Log(string.Format(
                     I18N_Start_Checking_Log,
                     string.Format(
                         I18N_SaveData_NewArchiveWillBeCreated,
-                        Path.GetFileName(account.SaveDataPath))));
+                        Path.GetFileName(saveDataPath))));
                 return true;
             }
 
-            if (File.Exists(DMMAccountInformation.DefaultSaveDataPath))
+            if (File.Exists(defaultSaveDataPath))
             {
-                File.Copy(DMMAccountInformation.DefaultSaveDataPath, DMMAccountInformation.DefaultSaveDataPath + ".backup", true);
+                File.Copy(defaultSaveDataPath, defaultSaveDataPath + ".backup", true);
                 DMMDisplay.Log(string.Format(I18N_Start_Checking_Log, I18N_SaveData_BackupCreated));
             }
 
-            File.Copy(account.SaveDataPath, DMMAccountInformation.DefaultSaveDataPath, true);
+            File.Copy(saveDataPath, defaultSaveDataPath, true);
             DMMDisplay.Log(string.Format(
                 I18N_Start_Checking_Log,
                 string.Format(I18N_SaveData_Loaded, account.Name)));
@@ -219,13 +223,13 @@ internal static partial class DMM
         }
     }
 
-    static void Launch(string args)
+    static void Launch(string gamePath, string args)
     {
         try
         {
             using var proc = Process.Start(new ProcessStartInfo
             {
-                FileName = MachineInformation.umamusume_file_path,
+                FileName = gamePath,
                 Arguments = args,
                 UseShellExecute = true,
                 Verb = "runas"

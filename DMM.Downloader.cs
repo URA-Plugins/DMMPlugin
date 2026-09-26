@@ -17,7 +17,8 @@ internal static partial class DMM
     /// </summary>
     public static async Task<(string fileListUrl, string sign, string latestVersion)> GetInstallInfoAsync(DMMAccountInformation account)
     {
-        var jsonContent = $$"""{"product_id":"{{ProductId}}","game_type":"GCL","game_os":"win","mac_address":"{{MachineInformation.mac_address}}","hdd_serial":"{{MachineInformation.hdd_serial}}","motherboard":"{{MachineInformation.motherboard}}","user_os":"{{MachineInformation.user_os}}"}""";
+        _ = ResolveGamePath(MachineInformation);
+        var jsonContent = CreateGameRequest().ToString(Newtonsoft.Json.Formatting.None);
 
         var jo = await PostWithAuthAsync(account, $"{ApiBase}/r2/install/cl", jsonContent);
 

@@ -10,6 +10,7 @@ public class DMMPlugin : IPlugin
     // Startup and configuration can both refresh tokens and save the same settings file.
     readonly SemaphoreSlim operationGate = new(1, 1);
     IApplication application = null!;
+    internal Lazy<DMMDeviceInformation> DeviceInformation { get; } = new(DMMDeviceInformation.Collect);
 
     public string DataDirectory => Path.Combine("PluginData", "DMM插件");
     public string SettingsFilePath => Path.Combine(DataDirectory, "settings.yaml");
@@ -98,17 +99,17 @@ public class DMMPlugin : IPlugin
                 DMMPluginSettings.Load(SettingsFilePath),
                 cancellationToken);
 
+            var updateGamePath = result.UpdateAccount is null ? null : DMM.ResolveGamePath(result.Settings.MachineInformation);
             ApplySettings(result.Settings);
             SyncToStatic();
             SaveSettings();
 
             foreach (var association in result.SaveDataAssociations)
-                association.Account.HandleFirstTimeSaveDataAssociation(association.IsCurrentAccount);
+                association.Account.HandleFirstTimeSaveDataAssociation(association.IsCurrentAccount, association.GamePath);
 
             if (result.UpdateAccount is not null)
             {
-                var installDir = Path.GetDirectoryName(DMMConfig.MachineInformation.umamusume_file_path)
-                    ?? throw new InvalidOperationException("赛马娘可执行文件路径没有父目录。");
+                var installDir = Path.GetDirectoryName(updateGamePath)!;
                 var (fileListUrl, sign, latestVersion) = await DMM.GetFileListAsync(result.UpdateAccount);
                 await DMM.DownloadGameAsync(
                     result.UpdateAccount,

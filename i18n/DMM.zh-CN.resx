@@ -87,22 +87,10 @@
     <value>不支持修改，如有需求请直接修改config.yaml。选中任意回车返回</value>
   </data>
   <data name="Tabs_DMM_EditMachineInformation" xml:space="preserve">
-    <value>编辑机器信息</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputMA" xml:space="preserve">
-    <value>输入mac_address</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputHS" xml:space="preserve">
-    <value>输入hdd_serial</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputMB" xml:space="preserve">
-    <value>输入motherboard</value>
-  </data>
-  <data name="Tabs_DMM_EditMachineInformation_InputOS" xml:space="preserve">
-    <value>输入user_os</value>
+    <value>游戏可执行文件路径</value>
   </data>
   <data name="Tabs_DMM_EditMachineInformation_InputUmamusumePath" xml:space="preserve">
-    <value>输入马娘执行文件路径</value>
+    <value>赛马娘可执行文件</value>
   </data>
   <data name="Tabs_DMM_EditAccounts" xml:space="preserve">
     <value>编辑账号</value>
@@ -336,5 +324,26 @@
   </data>
   <data name="Tabs_DMM_UpdateGame" xml:space="preserve">
     <value>更新/下载游戏</value>
+  </data>
+  <data name="I18N_Path_AutoDiscover" xml:space="preserve">
+    <value>留空自动发现：读取 DMM Game Player 的游戏安装记录。</value>
+  </data>
+  <data name="I18N_Device_WindowsRequired" xml:space="preserve">
+    <value>自动获取 DMM 设备信息需要 Windows。</value>
+  </data>
+  <data name="I18N_Device_MachineGuidFailed" xml:space="preserve">
+    <value>无法从 HKLM\SOFTWARE\Microsoft\Cryptography（64 位视图）读取非空 MachineGuid，请检查注册表访问权限。</value>
+  </data>
+  <data name="I18N_Device_NoMacAddress" xml:space="preserve">
+    <value>未找到具有非空且非全零 MAC 地址的网卡，请检查网络适配器。</value>
+  </data>
+  <data name="I18N_Path_ExecutableMissing" xml:space="preserve">
+    <value>游戏可执行文件路径不是绝对路径或文件不存在：{0}。请在 DMMPlugin 配置中指定有效的可执行文件路径。</value>
+  </data>
+  <data name="I18N_Path_DiscoveryFailed" xml:space="preserve">
+    <value>{0} 请在 DMMPlugin 配置中指定游戏可执行文件路径。</value>
+  </data>
+  <data name="I18N_Path_NotFound" xml:space="preserve">
+    <value>未发现已安装的赛马娘，请在 DMMPlugin 配置中手动指定游戏可执行文件路径。</value>
   </data>
 </root>

@@ -1,5 +1,6 @@
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace DMMPlugin;
@@ -29,6 +30,18 @@ internal sealed class DMMPluginSettings
         DMMPluginSettings settings;
         try
         {
+            var document = new YamlStream();
+            document.Load(new StringReader(yaml));
+            if (document.Documents.Count == 1 && document.Documents[0].RootNode is YamlMappingNode root &&
+                root.Children.TryGetValue("machine_information", out var node) && node is YamlMappingNode machine)
+            {
+                // Released settings may contain these keys; device identity is always collected locally.
+                foreach (var key in new[] { "mac_address", "hdd_serial", "motherboard", "user_os" })
+                    machine.Children.Remove(key);
+                using var writer = new StringWriter();
+                document.Save(writer, assignAnchors: false);
+                yaml = writer.ToString();
+            }
             settings = Deserializer.Deserialize<DMMPluginSettings>(yaml)
                 ?? throw new InvalidDataException($"DMMPlugin 配置文件为空或格式无效: {path}");
         }
