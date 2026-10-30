@@ -25,7 +25,7 @@ The plugin requires Windows, a valid DMM account, network access to DMM services
 
 The `mac_address`, `hdd_serial`, `motherboard`, and `user_os` keys under `machine_information` from released configurations are accepted but ignored. Loading does not rewrite the file; the next normal save omits those four keys. They are not manual overrides, and accepting them has no scheduled end version. Other unknown keys remain errors.
 
-## Build and smoke test
+## Build
 
 The repository references Host API and build targets through NuGet with `Version="*"`. Both the Host runtime and reference package must expose `UraCoreHelper.FindDmmGameExecutable`; release them before releasing this plugin. Initialize the plugin source dependency before building:
 
@@ -34,16 +34,6 @@ git -c core.longpaths=true submodule update --init --recursive
 dotnet build .\DMMPlugin.csproj -c Release -m:1 -p:RuntimeIdentifier=win-x64 -p:SelfContained=false -p:PlatformTarget=AnyCPU -p:DeployUraPluginToLocalAppDataOnBuild=false
 act workflow_dispatch --artifact-server-path "$env:TEMP/ura-act-artifacts"
 ```
-
-`DMMPlugin.slnx` builds only the plugin. Run the smoke project separately with `UraTestHostRoot` set to the Host source checkout matching the resolved Host NuGet package:
-
-```powershell
-dotnet run --project .\tests\DMMPlugin.Tests\DMMPlugin.Tests.csproj -c Release -p:UraTestHostRoot=K:\repos\UmamusumeResponseAnalyzer -p:GenerateUraPluginManifestOnBuild=false -p:PackageUraPluginOnBuild=false -p:DeployUraPluginToLocalAppDataOnBuild=false
-```
-
-The smoke checks authentication parsing, DPAPI settings, device hashing and command failures, adapter selection, shared Host discovery, manual path overrides, retired settings keys, and configuration save/cancel behavior. Installation record parsing is tested in Host's `GameDiscoveryTests`. The smoke uses synthetic account data and does not authenticate with DMM.
-
-The default smoke also checks the repository publication boundary, unused workspace lifecycle, and an empty-token `StartAsync` failure through the real Host framebuffer: one error log, one info log and one notification card, with settings unchanged. Test helpers live in `tests/Support/`.
 
 ## 验证与发布
 

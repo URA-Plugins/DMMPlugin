@@ -23,10 +23,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="tests\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Compile Update="i18n\DMM.Designer.cs">
 			<DependentUpon>DMM.resx</DependentUpon>
 			<DesignTime>True</DesignTime>

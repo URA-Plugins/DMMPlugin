@@ -2,11 +2,11 @@
 
 ## Structure
 
-`Class1.cs` is the `IPlugin` entry point. The `DMM.*.cs` partials own DMM authentication, file download, launch, and game-data operations. `DMMConfigDialog.cs` owns the Terminal.Gui configuration flow; `DMMPluginSettings.cs` and `DMMConfig.cs` define persisted settings and runtime state. Localization sources are under `i18n/`, and the smoke executable is under `tests/DMMPlugin.Tests/`.
+`Class1.cs` is the `IPlugin` entry point. The `DMM.*.cs` partials own DMM authentication, file download, launch, and game-data operations. `DMMConfigDialog.cs` owns the Terminal.Gui configuration flow; `DMMPluginSettings.cs` and `DMMConfig.cs` define persisted settings and runtime state. Localization sources are under `i18n/`.
 
-## Build safety and tests
+## Build safety
 
-Keep `DMMPlugin.slnx` limited to the plugin project. Run `tests/DMMPlugin.Tests/DMMPlugin.Tests.csproj` separately with an explicit `UraTestHostRoot`; the smoke requires Host runtime source and must not participate in the default Visual Studio solution restore.
+Keep `DMMPlugin.slnx` limited to the plugin project.
 
 The `UmamusumeResponseAnalyzer` package reference uses `Version="*"` for the latest stable Host build contract. Release builds generate a package with local deployment disabled:
 
@@ -32,4 +32,4 @@ Do not add a Host project reference, Gallop package, or plugin-abstractions pack
 - Ignore only the exact `mac_address`, `hdd_serial`, `motherboard`, and `user_os` keys under `machine_information` when reading released settings. Loading never rewrites the file; normal saves omit those keys. This acceptance has no scheduled removal version; all other unknown fields remain errors.
 - Configuration remains available before installation. Skip save-data association when the game path cannot be resolved; validate a launch/update path before authentication or save-data writes. Cancel, Esc, window close, and cancellation discard the draft. Edit all four `.resx` files together and regenerate the resource designer with ResGen.
 
-测试支持源码保存在本仓 `tests/Support/`；正常 smoke 入口执行 `RepositoryChecks.Run()`，构建时通过 `UraTestHostRoot` 引用与 SDK 匹配的 Host 运行时。
+严禁在用户未要求的情况下擅自添加测试
