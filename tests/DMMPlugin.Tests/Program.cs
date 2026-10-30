@@ -18,6 +18,9 @@ if (args is ["--bios", var scenario])
     Environment.Exit(scenario == "failure" ? 1 : 0);
 }
 
+RepositoryChecks.Run();
+Environment.SetEnvironmentVariable("DisableRealDriverIO", "1");
+
 var tests = new (string Name, Action Run)[]
 {
     ("DMM notification uses Host boundary", NotificationUsesHostBoundaryWithoutPluginLifecycleState),
@@ -46,6 +49,12 @@ foreach (var test in tests)
         Console.Error.WriteLine(ex);
         Environment.Exit(1);
     }
+}
+
+using (var ui = new WorkspaceSmokeSession())
+{
+    PluginLifecycleSmoke.Run(ui);
+    DmmRuntimeSmoke.Run(ui);
 }
 
 static void NotificationUsesHostBoundaryWithoutPluginLifecycleState()

@@ -43,6 +43,8 @@ dotnet run --project .\tests\DMMPlugin.Tests\DMMPlugin.Tests.csproj -c Release -
 
 The smoke checks authentication parsing, DPAPI settings, device hashing and command failures, adapter selection, shared Host discovery, manual path overrides, retired settings keys, and configuration save/cancel behavior. Installation record parsing is tested in Host's `GameDiscoveryTests`. The smoke uses synthetic account data and does not authenticate with DMM.
 
+The default smoke also checks the repository publication boundary, unused workspace lifecycle, and an empty-token `StartAsync` failure through the real Host framebuffer: one error log, one info log and one notification card, with settings unchanged. Test helpers live in `tests/Support/`.
+
 ## 验证与发布
 
 在 Windows 仓库根执行 `act workflow_dispatch --artifact-server-path "$env:TEMP/ura-act-artifacts"`。本地与 GitHub 使用同一份 workflow；版本 tag 触发 GitHub Release 发布。环境要求、共用 workflow 本地映射和发布规则见 [URA plugin workflows](https://github.com/URA-Plugins/.github/blob/v1/README.md)。
