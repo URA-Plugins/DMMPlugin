@@ -5,8 +5,8 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>2026.9.26</Version>
-		<PluginChangelog>恢复 js-app-url 与 DMM Game Player 回调的登录解析。</PluginChangelog>
+		<Version>2026.10.31</Version>
+		<PluginChangelog>恢复 js-app-url 与 DMM Game Player 回调的登录解析；更新 ProtectedData 至 10.0.14，以及 Host SDK 和构建依赖。</PluginChangelog>
 		<!-- 自动把本插件的 NuGet 依赖闭包拷到输出。 -->
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
@@ -17,7 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-		<PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.5" />
+		<PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.14" />
 		<PackageReference Include="UmamusumeResponseAnalyzer" Version="*" PrivateAssets="all" />
 		<PackageReference Include="YamlDotNet" Version="18.1.0" />
 	</ItemGroup>
